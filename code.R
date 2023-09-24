@@ -19,7 +19,6 @@ for (i in 1:length(testjpgs)) {
 } 
 #THIS WORKED!!!!!!! 
 
-
 #example of loop
 #presidents <- c("George Washington", "John Adams", "Thomas Jefferson")
 #for (p in 1:length(presidents)) {
