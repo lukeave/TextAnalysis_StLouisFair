@@ -45,7 +45,6 @@ for (i in 1:length(jpgs)) {
 #### Data Preprocessing ####
 
 # building a corpus
-
 txt.files <- readtext(file.path("txt_files/"))
 txt.files <- txt.files %>% 
   arrange(doc_id)
@@ -56,16 +55,16 @@ metadata <- metadata[,-2]
 metadata <- metadata %>% 
   arrange(doc_id)
 
-data <- metadata %>% 
+raw.data <- metadata %>% 
   left_join(txt.files, by = "doc_id")
 
-#write.csv(data, file = "TextAnalysis_StLouisFair/data.csv")
-
-stopwords <- stop_words
+#write.csv(data, file = "TextAnalysis_StLouisFair/raw_data.csv")
 
 ## tokenization
 
 #customize stop words list
+stopwords <- stop_words
+
 stop_words_custom <- stop_words %>% 
   add_row(word="fair", lexicon="NA") %>% 
   add_row(word="world", lexicon="NA") %>% 
@@ -79,9 +78,11 @@ stop_words_custom <- stop_words %>%
   add_row(word="louis", lexicon="NA")
 
 #remove stop words
-data <- data %>%
+data <- raw.data %>%
   unnest_tokens(word, text) %>% 
   anti_join(stop_words_custom)
+
+write.csv(data, file = "TextAnalysis_StLouisFair/tokenized_data.csv")
 
 #raw count of words
 word.count <- data %>%
@@ -93,6 +94,29 @@ count.future.past <- data %>%
   filter(word %in% c("future", "past")) %>%
   group_by(month, word) %>% 
   summarise(count = n())
+
+#turn each month into a character for plotting (exploratory)
+count.future.past$month[1] <- "April"
+count.future.past$month[2] <- "April"
+count.future.past$month[3] <- "May"
+count.future.past$month[4] <- "May"
+count.future.past$month[5] <- "June"
+count.future.past$month[6] <- "June"
+count.future.past$month[7] <- "July"
+count.future.past$month[8] <- "July"
+count.future.past$month[9] <- "August"
+count.future.past$month[10] <- "August"
+count.future.past$month[11] <- "September"
+count.future.past$month[12] <- "October"
+count.future.past$month[13] <- "October"
+count.future.past$month[14] <- "November"
+count.future.past$month[15] <- "November"
+count.future.past$month[16] <- "December"
+count.future.past$month[17] <- "December"
+
+#turn each month into a factor for plotting (exploratory)
+count.future.past$month <- 
+  factor(count.future.past$month, levels=c("April", "May", "June", "July", "August", "September", "October", "November", "December"))
 
 #plot results (exploratory)
 count.future.past %>% 
