@@ -2,8 +2,7 @@ library(tidyverse)
 library(tesseract)
 library(tidytext) 
 library(readtext)
-library(widyr)
-library(SnowballC)
+library(ggplot2)
 
 #establish tesseract language parameters
 english <- tesseract("eng")
@@ -79,7 +78,7 @@ stop_words_custom <- stop_words %>%
 
 #remove stop words
 data <- raw.data %>%
-  unnest_tokens(word, text) %>% 
+  unnest_tokens(word, text) #%>% 
   anti_join(stop_words_custom)
 
 write.csv(data, file = "TextAnalysis_StLouisFair/tokenized_data.csv")
@@ -90,37 +89,62 @@ word.count <- data %>%
   as.data.frame()
 
 #random occurrence test (exploratory)
-count.future.past <- data %>%
-  filter(word %in% c("future", "past")) %>%
+count.indian.war <- data %>%
+  filter(word %in% c("indian", "war")) %>%
   group_by(month, word) %>% 
   summarise(count = n())
 
 #turn each month into a character for plotting (exploratory)
-count.future.past$month[1] <- "April"
-count.future.past$month[2] <- "April"
-count.future.past$month[3] <- "May"
-count.future.past$month[4] <- "May"
-count.future.past$month[5] <- "June"
-count.future.past$month[6] <- "June"
-count.future.past$month[7] <- "July"
-count.future.past$month[8] <- "July"
-count.future.past$month[9] <- "August"
-count.future.past$month[10] <- "August"
-count.future.past$month[11] <- "September"
-count.future.past$month[12] <- "October"
-count.future.past$month[13] <- "October"
-count.future.past$month[14] <- "November"
-count.future.past$month[15] <- "November"
-count.future.past$month[16] <- "December"
-count.future.past$month[17] <- "December"
+count.indian.war$month[1] <- "April"
+count.indian.war$month[2] <- "April"
+count.indian.war$month[3] <- "May"
+count.indian.war$month[4] <- "May"
+count.indian.war$month[5] <- "June"
+count.indian.war$month[6] <- "June"
+count.indian.war$month[7] <- "July"
+count.indian.war$month[8] <- "July"
+count.indian.war$month[9] <- "August"
+count.indian.war$month[10] <- "August"
+count.indian.war$month[11] <- "September"
+count.indian.war$month[12] <- "September"
+count.indian.war$month[13] <- "October"
+count.indian.war$month[14] <- "October"
+count.indian.war$month[15] <- "November"
+count.indian.war$month[16] <- "November"
+count.indian.war$month[17] <- "December"
 
 #turn each month into a factor for plotting (exploratory)
-count.future.past$month <- 
-  factor(count.future.past$month, levels=c("April", "May", "June", "July", "August", "September", "October", "November", "December"))
+count.indian.war$month <- 
+  factor(count.indian.war$month, levels=c("April", "May", "June", "July", "August", "September", "October", "November", "December"))
 
 #plot results (exploratory)
-count.future.past %>% 
+count.indian.war %>% 
   ggplot(aes(month, count, fill = word)) +
   geom_bar(position = "dodge", stat = "identity")
 
+### Natural Language Processing 
 
+## experimenting with spacyr
+
+txt <- readLines(con = "../txt_files/SLGD_1904_05_14_P3_001_02.txt")
+
+parsedtxt <- spacy_parse(txt)
+
+write.csv(parsedtxt, file = "../../../../../Desktop/testdata.csv")
+
+#plotting positive and negative terms
+sent <- get_sentiments(lexicon = "afinn")
+
+plotdata <- data %>% 
+  inner_join(sent) %>% 
+  group_by(article_date, doc_id) %>% 
+  add_tally() %>% 
+  tally(mean(value)) %>%
+  group_by(article_date) %>% 
+  tally(mean(n)) %>%
+  arrange(desc(n)) %>% 
+  mutate(color = ifelse((n > 0), "green","red"))
+
+plotdata %>% 
+  ggplot() + 
+  geom_col(aes(x = as.character(article_date), y = n)) + theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
