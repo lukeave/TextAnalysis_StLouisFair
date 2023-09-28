@@ -3,16 +3,21 @@ library(tesseract)
 library(tidytext) 
 library(readtext)
 library(ggplot2)
+library(spacyr)
 
 #establish tesseract language parameters
 english <- tesseract("eng")
+
+## TESTING Tesseract
+
 #list set of test files in a new variable 
 testjpgs <- list.files("testocr_folder/")
 #store relative path of test files in a new variable
 path <- paste("testocr_folder/")
 #store relative path for output txt files in a new variable
 newdir <- paste("txt_files/")
-#loop
+
+#test loop and OCR
 for (i in 1:length(testjpgs)) {
   filename <- paste(testjpgs[i]) #catch the file's name
   fullpath <- paste0(path, filename) #store the file's relative path
@@ -22,17 +27,16 @@ for (i in 1:length(testjpgs)) {
 } 
 #THIS WORKED!
 
-#apply loop structure to actual JPG files
+## applying loop structure to actual JPG files
 
-#establish tesseract language parameters
-english <- tesseract("eng")
-#list set of jpg files in a new variable 
+#list all jpg files in a new variable 
 jpgs <- list.files("Newspaper_articles/")
 #store relative path of test files in a new variable
 path <- paste("Newspaper_articles/")
 #store relative path for output txt files in a new variable
 newdir <- paste("txt_files/")
-#loop
+
+#loop and OCR
 for (i in 1:length(jpgs)) {
   filename <- paste(jpgs[i]) #catch the file's name
   fullpath <- paste0(path, filename) #store the file's relative path
@@ -78,73 +82,87 @@ stop_words_custom <- stop_words %>%
 
 #remove stop words
 data <- raw.data %>%
-  unnest_tokens(word, text) #%>% 
+  unnest_tokens(word, text) %>% 
   anti_join(stop_words_custom)
 
 write.csv(data, file = "TextAnalysis_StLouisFair/tokenized_data.csv")
+
+## Data Exploratory Analyses
+#trying out different things
+
+#store character vector and numeric vector of months of the fair
+months.numeric <- c(4, 5, 6, 7, 8, 9, 10, 11, 12)
+months.character <- c("April", "May", "June", "July", "August", "September", "October", "November", "December")
 
 #raw count of words
 word.count <- data %>%
   count(word, sort = TRUE) %>% 
   as.data.frame()
 
-#random occurrence test (exploratory)
+#random term frequency test
 count.indian.war <- data %>%
   filter(word %in% c("indian", "war")) %>%
   group_by(month, word) %>% 
-  summarise(count = n())
+  summarise(count = n()) %>% 
+  mutate(color = ifelse(word == "indian", "orange","red"))
 
-#turn each month into a character for plotting (exploratory)
-count.indian.war$month[1] <- "April"
-count.indian.war$month[2] <- "April"
-count.indian.war$month[3] <- "May"
-count.indian.war$month[4] <- "May"
-count.indian.war$month[5] <- "June"
-count.indian.war$month[6] <- "June"
-count.indian.war$month[7] <- "July"
-count.indian.war$month[8] <- "July"
-count.indian.war$month[9] <- "August"
-count.indian.war$month[10] <- "August"
-count.indian.war$month[11] <- "September"
-count.indian.war$month[12] <- "September"
-count.indian.war$month[13] <- "October"
-count.indian.war$month[14] <- "October"
-count.indian.war$month[15] <- "November"
-count.indian.war$month[16] <- "November"
-count.indian.war$month[17] <- "December"
-
-#turn each month into a factor for plotting (exploratory)
-count.indian.war$month <- 
-  factor(count.indian.war$month, levels=c("April", "May", "June", "July", "August", "September", "October", "November", "December"))
-
-#plot results (exploratory)
+#plot results
 count.indian.war %>% 
-  ggplot(aes(month, count, fill = word)) +
-  geom_bar(position = "dodge", stat = "identity")
+  ggplot(aes(month, count, fill = color)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
+  scale_fill_manual(values = c("orange" = "orange",
+                               "red" = "red")) +
+  xlab("month") +
+  scale_x_discrete(name = "month", limits = months.numeric,
+                   labels = c("4" = "April", "5" = "May", "6" = "June", "7" = "July", "8" = "August", "9" = "September", "10" = "October", "11" = "November", "12" = "December")) +
+  ylab("count") +
+  ggtitle("Frequency of terms 'Indian' and 'War' in newspaper articles across the months")
+
+#get positive-negative terms dataset
+sent <- get_sentiments(lexicon = "afinn")
+
+#plot positive and negative terms over the months
+plotdata.months <- data %>% 
+  inner_join(sent) %>% 
+  group_by(doc_id, month) %>% 
+  tally(mean(value)) %>%
+  arrange(month) %>% 
+  mutate(color = ifelse((n > 0), "green","red"))
+
+plotdata.months %>% 
+  ggplot() + 
+  geom_col(aes(x = month, y = n, fill = color)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
+  scale_fill_manual(values = c("green" = "green",
+                               "red" = "red")) +
+  scale_x_discrete(name = "months", limits = months.numeric,
+                   labels = c("4" = "April", "5" = "May", "6" = "June", "7" = "July", "8" = "August", "9" = "September", "10" = "October", "11" = "November", "12" = "December")) +
+  xlab("value") +
+  ggtitle("Positive and negative terms across each month")
+
+#plot positive and negative terms across every txt file
+plotdata.files <- data %>% 
+  inner_join(sent) %>% 
+  group_by(doc_id, month) %>% 
+  tally(mean(value)) %>%
+  arrange(month) %>% 
+  mutate(color = ifelse((n > 0), "green","red"))
+
+plotdata.files %>% 
+  ggplot() + 
+  geom_col(aes(x = doc_id, y = n, fill = color)) +
+  theme(axis.text.x = element_blank()) +
+  scale_fill_manual(values = c("green" = "green",
+                               "red" = "red")) +
+  xlab("text files (April - December)") +
+  ylab("value") +
+  ggtitle("Positive and negative words across each newspaper article between April and December, 1904")
 
 ### Natural Language Processing 
 
 ## experimenting with spacyr
 
-txt <- readLines(con = "../txt_files/SLGD_1904_05_14_P3_001_02.txt")
+txt <- readLines(con = "txt_files/SLGD_1904_05_14_P3_003_03.txt")
 
 parsedtxt <- spacy_parse(txt)
-
-write.csv(parsedtxt, file = "../../../../../Desktop/testdata.csv")
-
-#plotting positive and negative terms
-sent <- get_sentiments(lexicon = "afinn")
-
-plotdata <- data %>% 
-  inner_join(sent) %>% 
-  group_by(article_date, doc_id) %>% 
-  add_tally() %>% 
-  tally(mean(value)) %>%
-  group_by(article_date) %>% 
-  tally(mean(n)) %>%
-  arrange(desc(n)) %>% 
-  mutate(color = ifelse((n > 0), "green","red"))
-
-plotdata %>% 
-  ggplot() + 
-  geom_col(aes(x = as.character(article_date), y = n)) + theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
