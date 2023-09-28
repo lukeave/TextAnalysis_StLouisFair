@@ -5,26 +5,29 @@ library(readtext)
 library(ggplot2)
 library(spacyr)
 
+#establish working directory
+setwd(dir = "~/Desktop/Ph.D. Digital History/4. FALL 2023/HIST 8550 Seminar in Digital History")
+
 #establish tesseract language parameters
 english <- tesseract("eng")
 
 ## TESTING Tesseract
 
 #list set of test files in a new variable 
-testjpgs <- list.files("testocr_folder/")
+#testjpgs <- list.files("testocr_folder/")
 #store relative path of test files in a new variable
-path <- paste("testocr_folder/")
+#path <- paste("testocr_folder/")
 #store relative path for output txt files in a new variable
-newdir <- paste("txt_files/")
+#newdir <- paste("txt_files/")
 
 #test loop and OCR
-for (i in 1:length(testjpgs)) {
-  filename <- paste(testjpgs[i]) #catch the file's name
-  fullpath <- paste0(path, filename) #store the file's relative path
-  result <- tesseract::ocr(fullpath) #use the file's relative path to OCR
-  print(result) #show me what's going on
-  write.table(result, file = paste0(newdir, filename, ".txt"), sep = "\t") #write a new txt file in new txt_files directory
-} 
+#for (i in 1:length(testjpgs)) {
+#  filename <- paste(testjpgs[i]) #catch the file's name
+#  fullpath <- paste0(path, filename) #store the file's relative path
+#  result <- tesseract::ocr(fullpath) #use the file's relative path to OCR
+#  print(result) #show me what's going on
+#  write.table(result, file = paste0(newdir, filename, ".txt"), sep = "\t") #write a new txt file in new txt_files directory
+#} 
 #THIS WORKED!
 
 ## applying loop structure to actual JPG files
@@ -61,7 +64,7 @@ metadata <- metadata %>%
 raw.data <- metadata %>% 
   left_join(txt.files, by = "doc_id")
 
-#write.csv(data, file = "TextAnalysis_StLouisFair/raw_data.csv")
+write.csv(raw.data, file = "TextAnalysis_StLouisFair/raw_data.csv")
 
 ## tokenization
 
@@ -112,7 +115,9 @@ count.indian.war %>%
   geom_bar(position = "dodge", stat = "identity") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
   scale_fill_manual(values = c("orange" = "orange",
-                               "red" = "red")) +
+                               "red" = "red"),
+                    labels = c("indian", "war"),
+                    name = "legend") +
   xlab("month") +
   scale_x_discrete(name = "month", limits = months.numeric,
                    labels = c("4" = "April", "5" = "May", "6" = "June", "7" = "July", "8" = "August", "9" = "September", "10" = "October", "11" = "November", "12" = "December")) +
@@ -135,7 +140,9 @@ plotdata.months %>%
   geom_col(aes(x = month, y = n, fill = color)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
   scale_fill_manual(values = c("green" = "green",
-                               "red" = "red")) +
+                               "red" = "red"),
+                    labels = c("positive", "negative"),
+                    name = "legend") +
   scale_x_discrete(name = "months", limits = months.numeric,
                    labels = c("4" = "April", "5" = "May", "6" = "June", "7" = "July", "8" = "August", "9" = "September", "10" = "October", "11" = "November", "12" = "December")) +
   xlab("value") +
@@ -154,7 +161,9 @@ plotdata.files %>%
   geom_col(aes(x = doc_id, y = n, fill = color)) +
   theme(axis.text.x = element_blank()) +
   scale_fill_manual(values = c("green" = "green",
-                               "red" = "red")) +
+                               "red" = "red"),
+                    labels = c("positive", "negative"),
+                    name = "legend") +
   xlab("text files (April - December)") +
   ylab("value") +
   ggtitle("Positive and negative words across each newspaper article between April and December, 1904")
