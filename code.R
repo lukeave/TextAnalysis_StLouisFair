@@ -5,13 +5,13 @@ library(readtext)
 library(ggplot2)
 library(spacyr)
 
-#establish working directory
+#set working directory
 setwd(dir = "~/Desktop/Ph.D. Digital History/4. FALL 2023/HIST 8550 Seminar in Digital History")
+
+#### TESTING Tesseract ####
 
 #establish tesseract language parameters
 english <- tesseract("eng")
-
-## TESTING Tesseract
 
 #list set of test files in a new variable 
 #testjpgs <- list.files("testocr_folder/")
@@ -29,6 +29,8 @@ english <- tesseract("eng")
 #  write.table(result, file = paste0(newdir, filename, ".txt"), sep = "\t") #write a new txt file in new txt_files directory
 #} 
 #THIS WORKED!
+
+#### Tesseract ####
 
 ## applying loop structure to actual JPG files
 
@@ -48,7 +50,7 @@ for (i in 1:length(jpgs)) {
   write_file(result, file = paste0(newdir, filename, ".txt")) #write a new txt file in new txt_files directory
 } 
 
-#### Data Preprocessing ####
+#### Data Preprocessing #####
 
 # building a corpus
 txt.files <- readtext(file.path("txt_files/"))
@@ -90,7 +92,7 @@ data <- raw.data %>%
 
 write.csv(data, file = "TextAnalysis_StLouisFair/tokenized_data.csv")
 
-## Data Exploratory Analyses
+#### Data Exploratory Analyses ####
 #trying out different things
 
 #store character vector and numeric vector of months of the fair
@@ -129,7 +131,7 @@ sent <- get_sentiments(lexicon = "afinn")
 
 #plot positive and negative terms over the months
 plotdata.months <- data %>% 
-  inner_join(sent) %>% 
+  inner_join(sent) #%>% 
   group_by(doc_id, month) %>% 
   tally(mean(value)) %>%
   arrange(month) %>% 
@@ -150,7 +152,7 @@ plotdata.months %>%
 
 #plot positive and negative terms across every txt file
 plotdata.files <- data %>% 
-  inner_join(sent) %>% 
+  inner_join(sent) #%>% 
   group_by(doc_id, month) %>% 
   tally(mean(value)) %>%
   arrange(month) %>% 
@@ -168,10 +170,15 @@ plotdata.files %>%
   ylab("value") +
   ggtitle("Positive and negative words across each newspaper article between April and December, 1904")
 
-### Natural Language Processing 
+#### Natural Language Processing ####
 
 ## experimenting with spacyr
 
-txt <- readLines(con = "txt_files/SLGD_1904_05_14_P3_003_03.txt")
+txt <- readLines(con = "txt_files/")
 
-parsedtxt <- spacy_parse(txt)
+parsedtxt <- spacy_parse(raw.data$text)
+
+colnames(parsedtxt)[4] <- "word"
+
+sent.parsed.data <- parsedtxt %>% 
+  inner_join(sent)
