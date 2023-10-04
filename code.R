@@ -129,20 +129,25 @@ count.indian.war %>%
 #get positive-negative terms dataset
 sent <- get_sentiments(lexicon = "afinn")
 
-#plot positive and negative terms over the months
-plotdata.months <- data %>% 
-  inner_join(sent) #%>% 
-  group_by(doc_id, month) %>% 
-  tally(mean(value)) %>%
-  arrange(month) %>% 
-  mutate(color = ifelse((n > 0), "green","red"))
+#create a sentiment dataset
+sent.data <- data %>% 
+  left_join(sent) %>% 
+  mutate(sentiment = ifelse((sent.data$value > 0),"positive", 
+                            ifelse(sent.data$value <0, "negative", "NA")))
 
-plotdata.months %>% 
+write.csv(sent.data, file = "TextAnalysis_StLouisFair/sentiment_data.csv")
+ 
+#plot positive and negative terms over the months
+sent.data %>% 
+  group_by(article_id, month) %>% 
+  tally(mean(!is.na(value)))%>%
+  arrange(month) %>% 
+  mutate(color = ifelse((n > 0), "green4","red4")) %>% 
   ggplot() + 
   geom_col(aes(x = month, y = n, fill = color)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
-  scale_fill_manual(values = c("green" = "green",
-                               "red" = "red"),
+  scale_fill_manual(values = c("green4" = "green4",
+                               "red4" = "red4"),
                     labels = c("positive", "negative"),
                     name = "legend") +
   scale_x_discrete(name = "months", limits = months.numeric,
@@ -150,23 +155,21 @@ plotdata.months %>%
   xlab("value") +
   ggtitle("Positive and negative terms across each month")
 
-#plot positive and negative terms across every txt file
-plotdata.files <- data %>% 
-  inner_join(sent) #%>% 
-  group_by(doc_id, month) %>% 
-  tally(mean(value)) %>%
-  arrange(month) %>% 
-  mutate(color = ifelse((n > 0), "green","red"))
+#plot positive and negative terms across every article
 
-plotdata.files %>% 
+sent.data %>% 
+  group_by(article_id, month) %>% 
+  tally(mean(!is.na(value))) %>%
+  arrange(month) %>% 
+  mutate(color = ifelse((n > 0), "green4","red4")) %>% 
   ggplot() + 
-  geom_col(aes(x = doc_id, y = n, fill = color)) +
+  geom_col(aes(x = article_id, y = n, fill = color)) +
   theme(axis.text.x = element_blank()) +
-  scale_fill_manual(values = c("green" = "green",
+  scale_fill_manual(values = c("green4" = "green4",
                                "red" = "red"),
                     labels = c("positive", "negative"),
                     name = "legend") +
-  xlab("text files (April - December)") +
+  xlab("articles (April - December)") +
   ylab("value") +
   ggtitle("Positive and negative words across each newspaper article between April and December, 1904")
 
