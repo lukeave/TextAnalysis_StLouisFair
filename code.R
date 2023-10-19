@@ -4,6 +4,10 @@ library(tidytext)
 library(readtext)
 library(ggplot2)
 library(spacyr)
+library(ggmap)
+library(tidygeocoder)
+library(stringr)
+library(dplyr)
 
 #set working directory
 setwd(dir = "~/Desktop/Ph.D. Digital History/4. FALL 2023/HIST 8550 Seminar in Digital History")
@@ -66,6 +70,14 @@ metadata <- metadata %>%
 raw.data <- metadata %>% 
   left_join(txt.files, by = "doc_id")
 
+# strip out punctuation and uppercase letters form raw data
+raw.data$text <- raw.data$text %>%
+  str_to_lower() %>%
+  str_replace_all("[:punct:]", "") %>% 
+  str_remove_all("~") %>% 
+  str_remove_all("|") %>% 
+  str_replace_all("[^[:alnum:]]", " ")
+
 write.csv(raw.data, file = "TextAnalysis_StLouisFair/raw_data.csv")
 
 ## tokenization
@@ -78,6 +90,7 @@ stop_words_custom <- stop_words %>%
   add_row(word="world", lexicon="NA") %>% 
   add_row(word="world's ", lexicon="NA") %>% 
   add_row(word="world's", lexicon="NA") %>% 
+  add_row(word="worlds", lexicon="NA") %>% 
   add_row(word="exhibit", lexicon="NA") %>% 
   add_row(word="exposition", lexicon="NA") %>% 
   add_row(word="louisiana", lexicon="NA") %>% 
@@ -87,7 +100,9 @@ stop_words_custom <- stop_words %>%
 
 #remove stop words
 data <- raw.data %>%
-  unnest_tokens(word, text) %>% 
+  unnest_tokens(word, text) 
+
+data <- data %>% 
   anti_join(stop_words_custom)
 
 write.csv(data, file = "TextAnalysis_StLouisFair/tokenized_data.csv")
@@ -95,11 +110,28 @@ write.csv(data, file = "TextAnalysis_StLouisFair/tokenized_data.csv")
 #### Data Exploratory Analyses ####
 #trying out different things
 
-#store character vector and numeric vector of months of the fair
-months.numeric <- c(4, 5, 6, 7, 8, 9, 10, 11, 12)
-months.character <- c("April", "May", "June", "July", "August", "September", "October", "November", "December")
-
 #raw count of words
+word.count <- data %>%
+  count(word, sort = TRUE) %>% 
+  as.data.frame()
+
+#remove more irrelevant words
+#this will require a close-reading first examination of the word.count data
+
+other.stop.words <- c("ee", "day", "building", "company", "ae", "miss", "oe", "yesterday", "ing", "se", "es", "de", "te", "eee", "tion", "en", "er", "ss", "ts", "lols", "exhibits", "con", "al", "tn", "pe", "ne", "ad", "ed", "ar")
+
+other.stop.words <- other.stop.words %>% 
+  as.data.frame()
+
+colnames(other.stop.words)[1] <- "word"
+
+data <- data %>% 
+   anti_join(other.stop.words)
+
+#now remove all numeric data
+data <- data %>% filter(!grepl("[[:digit:]]", word))
+
+#count again
 word.count <- data %>%
   count(word, sort = TRUE) %>% 
   as.data.frame()
@@ -131,16 +163,23 @@ sent <- get_sentiments(lexicon = "afinn")
 
 #create a sentiment dataset
 sent.data <- data %>% 
-  left_join(sent) %>% 
+  left_join(sent) 
+
+sent.data <- sent.data %>% 
   mutate(sentiment = ifelse((sent.data$value > 0),"positive", 
                             ifelse(sent.data$value <0, "negative", "NA")))
 
 write.csv(sent.data, file = "TextAnalysis_StLouisFair/sentiment_data.csv")
  
+
+#store character vector and numeric vector of months of the fair
+months.numeric <- c(4, 5, 6, 7, 8, 9, 10, 11, 12)
+months.character <- c("April", "May", "June", "July", "August", "September", "October", "November", "December")
+
 #plot positive and negative terms over the months
 sent.data %>% 
   group_by(article_id, month) %>% 
-  tally(mean(!is.na(value)))%>%
+  tally(mean(value, na.rm = TRUE)) %>%
   arrange(month) %>% 
   mutate(color = ifelse((n > 0), "green4","red4")) %>% 
   ggplot() + 
@@ -155,18 +194,18 @@ sent.data %>%
   xlab("value") +
   ggtitle("Positive and negative terms across each month")
 
-#plot positive and negative terms across every article
 
+#plot positive and negative terms across every article
 sent.data %>% 
   group_by(article_id, month) %>% 
-  tally(mean(!is.na(value))) %>%
+  tally(mean(value, na.rm = TRUE)) %>%
   arrange(month) %>% 
   mutate(color = ifelse((n > 0), "green4","red4")) %>% 
   ggplot() + 
   geom_col(aes(x = article_id, y = n, fill = color)) +
   theme(axis.text.x = element_blank()) +
   scale_fill_manual(values = c("green4" = "green4",
-                               "red" = "red"),
+                               "red4" = "red4"),
                     labels = c("positive", "negative"),
                     name = "legend") +
   xlab("articles (April - December)") +
@@ -175,13 +214,16 @@ sent.data %>%
 
 #### Natural Language Processing ####
 
-## experimenting with spacyr
+## experimenting with spacyr - TO BE DONE YET
 
-txt <- readLines(con = "txt_files/")
-
+#parse the text from the raw data text column
 parsedtxt <- spacy_parse(raw.data$text)
 
+#remove stop words from the parsedtxt dataframe
 colnames(parsedtxt)[4] <- "word"
+parsedtxt2 <- parsedtxt %>% 
+  anti_join(stop_words_custom)
 
-sent.parsed.data <- parsedtxt %>% 
-  inner_join(sent)
+#filter parsedtxt to words that are NOPR or GPE only
+entities <- parsedtxt %>% 
+  filter(grepl('NORP', entity) | grepl('GPE', entity))
