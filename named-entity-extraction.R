@@ -9,7 +9,7 @@ library(tidygeocoder)
 library(stringr)
 library(dplyr)
 
-#### experimenting with spacy_parse ####
+#### Named Entity Extraction ####
 
 #parse the text from the text data
 parsedtxt <- spacy_parse(text.data, lemma = FALSE, additional_attributes = c("ent_iob_"))
@@ -37,8 +37,9 @@ entities.count <- entities %>%
   count(token, sort = TRUE) %>% 
   as.data.frame() #this df allowed me to perform close reading of each entity and note which ones could be altered in the entities df before moving forward
 
+#### Data Annotation #### 
 
-## Annotating the entities df prior to cleaning the data
+## Annotate the entities df prior to cleaning the data
 #DO NOT remove any rows before this step is complete
 entities <- entities %>% 
   mutate(annotation = "NA")
@@ -70,7 +71,7 @@ entities <- entities %>%
                                                          ifelse(rowid %in% c(2698, 48392), "SX",#Sioux
                                                                ifelse(rowid %in% c(18085, 51505, 71607), "IN", #Indiana
                                                                       ifelse(rowid %in% c(), "IMD", #India
-                                                                             annotation)))))))))
+                                                                  annotation)))))))))
 
 
 #mutate the original token column in the entities df
@@ -90,6 +91,8 @@ entities <- entities %>%
                                                                                                      ifelse(annotation == "SX", "sioux",
                                                                                                             ifelse(annotation == "IMD", "India",
                                                                                                                    token))))))))))))))) #must add all other annotations before running
+
+#### Data Cleaning ####
 
 #remove rows with token "india*" that should not be counted as entities
 entities <- entities %>% 
@@ -225,6 +228,8 @@ false.tokens <- c("st", "louis", "louisiana", "louisi", "louislana", "the", "cit
 entities.count <- entities.count %>% 
   filter (!token %in% false.tokens)
 
+#### Getting Place Names ####
+
 # third count -- this time, counting the newly assigned place names in the entities.count df
 placenames <- entities.count %>%
   count(place_name, sort = TRUE) %>% 
@@ -233,6 +238,13 @@ placenames <- entities.count %>%
 #filter placenames df to remove statistically irrelevant counts
 placenames <- placenames %>% 
   filter(n > 1)
+
+#create lists of place names by scale
+cities <- c()
+states <- c()
+countries <- c()
+continents <- c()
+native_nations <- c()
 
 #create a new variable in the placenames df that distinguishes tokens by scale 
 #(i.e., city, state, country, continent, native_nation)
@@ -243,3 +255,7 @@ placenames <- placenames %>%
                                       ifelse(token %in% continents, "continents",
                                              ifelse(token %in% native_nations, "native_nation",
                                                     "NA"))))))
+
+#### Geocoding ####
+
+
