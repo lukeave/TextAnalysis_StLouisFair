@@ -60,18 +60,18 @@ entities <- entities %>%
                                     ifelse(rowid %in% c(50680, 50933), "GM", #Gulf of Mexico
                                            annotation))))
 
-#STILL DOING THIS ONE
 #catch accurate place references for all occurrences of the token "india*"
 entities <- entities %>% 
-  mutate(annotation = ifelse(rowid %in% c(2493, 2517, 2665, 10491, 13453, 15079, 15093, 26254, 28119, 28172, 28291, 28309, 28321, 31123, 36973, 39803, 50324, 61166, 66165, 69596, 69628, 69893), "NTV", #General meaning of Native
+  mutate(annotation = ifelse(rowid %in% c(2493, 2517, 2665, 10491, 13453, 15079, 15093, 26254, 28119, 28172, 28291, 28309, 28321, 31123, 36973, 39803, 50324, 61166, 66165, 69596, 69628, 69893, 111527, 111556, 111565, 111608, 113060, 115177, 123943, 123952, 124042, 124063, 124071, 124102, 124259, 130019, 145828, 145897, 145914,147155, 147255, 147270, 147290, 147362, 147438, 147945, 148055, 148065, 148099, 148201, 148245, 148333, 165063, 165126, 167692, 171586, 171625, 171637, 171653, 171754, 171776, 171924, 172079, 172107, 172134, 174504, 174516, 176777, 176797, 177816, 177839, 177862, 177990, 178150, 178207, 179638, 191066, 191106, 191130, 191133, 191181, 194610, 194652, 203211, 203232, 203342), "NTV", #General meaning of Native
                              ifelse(rowid %in% c(10453, 10476, 10540), "AZ", #Pima, Americopa, and Papago
-                                    ifelse(rowid %in% c(2464), "CCP", #Cocopah
-                                           ifelse(rowid %in% c(34629), "KWK", #Kwakiutl
-                                                  ifelse(rowid %in% c(17049), "MQ", #Moqui
+                                    ifelse(rowid %in% c(2464, 177292, 177315, 177377, 186865), "CCP", #Cocopah
+                                           ifelse(rowid %in% c(34629, 169806), "KWK", #Kwakiutl
+                                                  ifelse(rowid %in% c(17049, 84677), "MQ", #Moqui
                                                          ifelse(rowid %in% c(2698, 48392), "SX",#Sioux
-                                                               ifelse(rowid %in% c(18085, 51505, 71607), "IN", #Indiana
-                                                                      ifelse(rowid %in% c(), "IMD", #India
-                                                                  annotation)))))))))
+                                                               ifelse(rowid %in% c(18085, 51505, 71607, 104051, 130236, 130736, 131699, 166770, 166884, 178598, 179657, 180198, 180210, 186535, 186566, 197763, 197895, 201477), "IN", #Indiana
+                                                                      ifelse(rowid %in% c(147343), "PB", #Pueblo
+                                                                             ifelse(rowid %in% c(164048), "IMD", #India
+                                                                  annotation))))))))))
 
 
 #mutate the original token column in the entities df
@@ -84,13 +84,15 @@ entities <- entities %>%
                                                     ifelse(annotation == "MEX", "mexico",
                                                            ifelse(annotation == "CCP", "cocopah_reservation",
                                                                   ifelse(annotation == "GM", "gulf_mexico",
+                                                                         ifelse(annotation == "NTV", "native",
                                                                          ifelse(annotation == "AZ", "pima_americopa_papago",
                                                                                 ifelse(annotation == "KWK", "kwakiutl",
                                                                                        ifelse(annotation == "MQ", "moqui",
                                                                                               ifelse(annotation == "IN", "indiana",
                                                                                                      ifelse(annotation == "SX", "sioux",
-                                                                                                            ifelse(annotation == "IMD", "India",
-                                                                                                                   token))))))))))))))) #must add all other annotations before running
+                                                                                                            ifelse(annotation == "PB", "pueblo",
+                                                                                                            ifelse(annotation == "IMD", "india",
+                                                                                                                   token))))))))))))))))) 
 
 #### Data Cleaning ####
 
@@ -98,19 +100,15 @@ entities <- entities %>%
 entities <- entities %>% 
   filter(!rowid == 55903) # "indian summer"
 
-#to avoid double counting, remove row with "mexico" occurrence that had already been counted as part of "new_mexico"
-entities <- entities %>% 
-  filter(!rowid == 84193)
-
-# second count -- this time, without grouping by the entity type
+# second count -- this time, without grouping by entity type
 entities.count <- entities %>%
   count(token, sort = TRUE) %>% 
-  as.data.frame()
+  as.data.frame() #use this df to retrieve a list of terms that will be used in the code below.
 
-#apply fct_collapse() to the new df to get proper set of place names 
+## when the list is complete, apply fct_collapse on the entities df to get proper place_names (NOT on the entities.count df)
 ## must count again after this step is complete
 
-entities.count <- entities.count %>% 
+entities <- entities %>% 
   mutate(place_name = fct_collapse(token, "United States" = c("united", "american", "americans", "america"),
                                    "Alaska" = c("alaska", "alaskan"),
                                    "Russia" = c("russia", "russian"),
@@ -122,7 +120,7 @@ entities.count <- entities.count %>%
                                    "New York" = c("york", "new_york"),
                                    "Chicago" = "chicago",
                                    "France" = c("france", "french"),
-                                   "China" = c("china", "chinese"),
+                                   "China" = c("china", "chinese", "cina", "ckinese"),
                                    "Kansas" = c("kans", "kansas"),
                                    "Japan" = c("japan", "japanese"),
                                    "Paris" = "paris",
@@ -130,11 +128,11 @@ entities.count <- entities.count %>%
                                    "United Kingdom" = c("british", "britain", "england", "kingdom", "britannia"),
                                    "Ireland" = c("irish", "irishamericans", "irishmans"),
                                    "California" = c("cali", "fornia", "california"),
-                                   "Mexico" = c("mexico", "mexican", "mexicans"),
+                                   "Mexico" = c("mexico", "mexican", "mexicans", "merican"),
                                    "Ohio" = "ohio",
                                    "London" = "london",
                                    "Indiana" = "indiana",
-                                   "Indianapolis" = c("indianapolis", "dianapolis"),
+                                   "Indianapolis" = "dianapolis",
                                    "Canada" = c("canadian", "canada", "canadians"),
                                    "Toronto" = "toronto",
                                    "Kentucky" = "kentucky",
@@ -142,7 +140,7 @@ entities.count <- entities.count %>%
                                    "Italy" = c("italy", "italian", "italians"),
                                    "Boston" = "boston",
                                    "Colorado" = "colorado",
-                                   "Philippines" = c("filipino", "filipinos", "fillpino","philippine","philippines","philip", "philipines","philipipne", "philippiies", "philipping","philippne", "filipines", "filipind"),
+                                   "Philippines" = c("filipino", "filipinos", "fillpino","philippine","philippines","philip", "philipines","philipipne", "philippiies", "philipping","philippne", "filipines", "filipind", "filipinas", "filipine", "filipiso", "filipiz", "filiplines", "visayan", "visayans", "visaran", "visayas", "visaydn", "manila"),
                                    "Oklahoma" = "oklahoma",
                                    "Austria-Hungary" = c("austrohungarian", "austrian", "austria", "hungary"),
                                    "Berlin" = "berlin",
@@ -202,14 +200,12 @@ entities.count <- entities.count %>%
                                    "New Hampshire" = c("hampshire","new_hampshire"),
                                    "Idaho" = "idaho",
                                    "New Jersey" = c("jersey", "new_jersey"),
-                                   "Manila, Philippines" = "manila",
                                    "Muscogee (Creek) Nation" = "muskogee",
                                    "Nashville" = "nashville",
                                    "Nicaragua" = "nicaragua",
                                    "Norway" = c("norwegian", "norway"),
                                    "Patagonia" = "patagonian",
                                    "Portugal" = "portugal",
-                                   "Visayas, Philippines" = c("visayan", "visayans", "visaran", "visayas", "visaydn"),
                                    "Inner Mongolia" = "manchuria",
                                    "Zimbabwe" = "rhodesia",
                                    "Alabama" = "alabama",
@@ -219,25 +215,39 @@ entities.count <- entities.count %>%
                                    "Colombia" = "colombia",
                                    "Haiti" = "haiti",
                                    "India" = "india",
-                                   "Iroquois" = "troquois"
+                                   "Iroquois" = "troquois",
+                                   "Sioux" = c("sioux", "sious"),
+                                   "Cocopah" = c("cocopah_reservation", "cocopas", "cocopa"),
+                                   "Moqui" = c("mokis", "moki", "moqui"),
+                                   "Salt River Pima–Maricopa Indian Community" = "pima_americopa_papago",
+                                   "Kwakiutl" = "kwakiutl",
+                                   "Richmond, KY" = "richmond",
+                                   "Venice, Italy" = "venice",
+                                   "Vermont" = "vermont",
+                                   "Wisconsin" = "wisconsin"
   ))
 
-#list tokens that must be removed from the entities.count df
-false.tokens <- c("st", "louis", "louisiana", "louisi", "louislana", "the", "city", " ", "  ", "states") #removing "states" to avoid double counting "united states" when summarizing counts of "united" and "states"
+#based on the examination of the entities.count df, list tokens that must be removed from the entities df
+##if a token has less than 2 counts in the entities.count df, no need to include it in the false.tokens list
+###make sure to include"states" to avoid double counting "united states" when summarizing counts of "united" and "states"
+false.tokens <- c("st", "louis", "louisiana", "louisi", "louislana", "the", "city", " ", "  ", "states", "native", "mans", "delmar", "english", "east", "la", "west", "jefferson", "plaza", "republican", "al", "columbian", "dem", "dian", "sa", "smoking", "south", "womans", "vt", "christian", "county", "day", "democrat", "jand", "los", "louls", "loutsiana", "mo", "of", "panamerican", "us", "and", "bt", "coast", "democrats", "fu", "fort", "guards", "gulf_mexico", "kas", "medora", "nese", "north", "officiais", "reardon", "republicans", "sea", "sean", "smith", "sou", "thorpe", "to", "toledo", "willis", "   ", "12", "yt") 
+
 #remove false tokens
-entities.count <- entities.count %>% 
+entities <- entities %>% 
   filter (!token %in% false.tokens)
 
 #### Getting Place Names ####
 
 # third count -- this time, counting the newly assigned place names in the entities.count df
-placenames <- entities.count %>%
-  count(place_name, sort = TRUE) %>% 
+placenames <- entities %>%
+  group_by(place_name) %>% 
+  summarize(count = n()) %>% 
   as.data.frame()
 
 #filter placenames df to remove statistically irrelevant counts
 placenames <- placenames %>% 
-  filter(n > 1)
+  filter(count > 1) %>% 
+  arrange(desc(count))
 
 #create lists of place names by scale
 cities <- c()
