@@ -331,3 +331,10 @@ geocoded.data <- read.csv("geocoded.data.csv") #after manually geocoding Muscoge
 
 geocoded.data <- geocoded.data %>% 
   select(place_name, count, geo_address, latitude, longitude)
+rm(long.placenames)
+
+#add scale column to the new geocoded data df
+geocoded.data <- left_join(geocoded.data, placenames)
+geocoded.data <- geocoded.data[,-6]
+
+write.csv(geocoded.data, "geocoded_placenames.csv")
