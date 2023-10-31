@@ -5,6 +5,7 @@ library(readtext)
 library(ggplot2)
 library(spacyr)
 library(ggmap)
+library(maps)
 library(tidygeocoder)
 library(stringr)
 library(dplyr)
@@ -26,6 +27,10 @@ parsedtxt <- parsedtxt %>%
   mutate(entity = ifelse(grepl("troquois", token), "NORP", entity)) %>% 
   mutate(entity = ifelse(grepl("moqui", token) | grepl("moki", token),"NORP", entity)) %>% 
   mutate(entity = ifelse(grepl("zuni", token), "NORP", entity))
+#assign "NORP" as entity type to every instance of "america*" and its variations in the data 
+#the actual entities data will be cleaned later, and tokens mistakenly classified as entities will be removed
+parsedtxt <- parsedtxt %>% 
+  mutate(entity = ifelse(grepl("merica", token) | grepl("ameri", token) | grepl("brican", token), "NORP", entity))
 
 #filter parsedtxt to create entities df
 entities <- parsedtxt %>% 
@@ -60,6 +65,14 @@ entities <- entities %>%
                                     ifelse(rowid %in% c(50680, 50933), "GM", #Gulf of Mexico
                                            annotation))))
 
+
+# catch accurate place references for all occurrences of South, Central, and Latin America
+## collapse occurrences into one ("Latin America") since historically these have been used interchangeably.
+### there is no reference to North America in the corpus
+entities <- entities %>% 
+  mutate(annotation = ifelse(rowid %in% c(50638, 51817, 120834, 158114, 72540, 120834, 177041, 74151, 74317, 165817), "LatAm", #Latin America -- collapsing Latin, Central and South America into one since historically these have been used interchangeably.
+                             annotation))
+
 #catch accurate place references for all occurrences of the token "india*"
 entities <- entities %>% 
   mutate(annotation = ifelse(rowid %in% c(2493, 2517, 2665, 10491, 13453, 15079, 15093, 26254, 28119, 28172, 28291, 28309, 28321, 31123, 36973, 39803, 50324, 61166, 66165, 69596, 69628, 69893, 111527, 111556, 111565, 111608, 113060, 115177, 123943, 123952, 124042, 124063, 124071, 124102, 124259, 130019, 145828, 145897, 145914,147155, 147255, 147270, 147290, 147362, 147438, 147945, 148055, 148065, 148099, 148201, 148245, 148333, 165063, 165126, 167692, 171586, 171625, 171637, 171653, 171754, 171776, 171924, 172079, 172107, 172134, 174504, 174516, 176777, 176797, 177816, 177839, 177862, 177990, 178150, 178207, 179638, 191066, 191106, 191130, 191133, 191181, 194610, 194652, 203211, 203232, 203342), "NTV", #General meaning of Native
@@ -84,6 +97,7 @@ entities <- entities %>%
                                                     ifelse(annotation == "MEX", "mexico",
                                                            ifelse(annotation == "CCP", "cocopah_reservation",
                                                                   ifelse(annotation == "GM", "gulf_mexico",
+                                                                         ifelse(annotation == "LatAm", "latin_america",
                                                                          ifelse(annotation == "NTV", "native",
                                                                          ifelse(annotation == "AZ", "pima_americopa_papago",
                                                                                 ifelse(annotation == "KWK", "kwakiutl",
@@ -92,7 +106,7 @@ entities <- entities %>%
                                                                                                      ifelse(annotation == "SX", "sioux",
                                                                                                             ifelse(annotation == "PB", "pueblo",
                                                                                                             ifelse(annotation == "IMD", "india",
-                                                                                                                   token))))))))))))))))) 
+                                                                                                                   token)))))))))))))))))) 
 
 #### Data Cleaning ####
 
@@ -109,7 +123,8 @@ entities.count <- entities %>%
 ## must count again after this step is complete
 
 entities <- entities %>% 
-  mutate(place_name = fct_collapse(token, "United States" = c("united", "american", "americans", "america"),
+  mutate(place_name = fct_collapse(token, "United States" = c("united", "american", "americans", "america", "americanized", "americas", "ameri"),
+                                   "Latin America" = "latin_america",
                                    "Alaska" = c("alaska", "alaskan"),
                                    "Russia" = c("russia", "russian"),
                                    "Missouri" = c("mixsourt", "missouri", "misseuri"),
@@ -125,8 +140,8 @@ entities <- entities %>%
                                    "Japan" = c("japan", "japanese"),
                                    "Paris" = "paris",
                                    "Texas" = c("thétexas", "texason", "texas"),
-                                   "United Kingdom" = c("british", "britain", "england", "kingdom", "britannia"),
-                                   "Ireland" = c("irish", "irishamericans", "irishmans"),
+                                   "United Kingdom" = c("british", "britain", "england", "kingdom", "britannia", "scottish", "scotland"),
+                                   "Ireland" = c("irish", "irishmans"),
                                    "California" = c("cali", "fornia", "california"),
                                    "Mexico" = c("mexico", "mexican", "mexicans", "merican"),
                                    "Ohio" = "ohio",
@@ -149,7 +164,7 @@ entities <- entities %>%
                                    "Belgium" = c("belgium", "belgian"),
                                    "Cuba" = c("cuban", "cuba"),
                                    "Virginia" = "virginia",
-                                   "Netherlands" = c("dutch", "netherlands"),
+                                   "Netherlands" = c("dutch", "netherlands", "holland"),
                                    "Europe" = c("european", "pean"),
                                    "Philadelphia" = "philadelphia",
                                    "Jerusalem" = c("jerusalem", "jerwsalem"),
@@ -161,7 +176,6 @@ entities <- entities %>%
                                    "Sweden" = c("sweden", "swedish"),
                                    "Arkansas" = c("ark", "arkansas"),
                                    "Cincinnati" = "cincinnati",
-                                   "Holland" = "holland",
                                    "Minneapolis" = "minneapolis",
                                    "Pittsburg" = "pittsburg",
                                    "Rome" = "rome",
@@ -174,7 +188,7 @@ entities <- entities %>%
                                    "Maine" = "maine",
                                    "Maryland" = "maryland",
                                    "Nevada" = "nevada",
-                                   "Spain" = c("spanish", "spain", "spanishamerican"),
+                                   "Spain" = c("spanish", "spain"),
                                    "Switzerland" = "switzerland",
                                    "Atlanta" = "atlanta",
                                    "Connecticut" = "connecticut",
@@ -186,11 +200,10 @@ entities <- entities %>%
                                    "Oregon" = "oregon",
                                    "Persia" = c("persia", "persian"),
                                    "Sacramento" = "sacramento",
-                                   "Scotland" = c("scottish", "scotland"),
                                    "Vienna" = "vienna",
                                    "Alton" = "alton",
                                    "Los Angeles" = "angeles",
-                                   "Argentine" = "argentine",
+                                   "Argentina" = "argentine",
                                    "Asia" = c("asian", "asians"),
                                    "Baltimore" = "baltimore",
                                    "Birmingham" = "birmingham",
@@ -200,7 +213,7 @@ entities <- entities %>%
                                    "New Hampshire" = c("hampshire","new_hampshire"),
                                    "Idaho" = "idaho",
                                    "New Jersey" = c("jersey", "new_jersey"),
-                                   "Muscogee (Creek) Nation" = "muskogee",
+                                   "Muscogee Nation" = "muskogee",
                                    "Nashville" = "nashville",
                                    "Nicaragua" = "nicaragua",
                                    "Norway" = c("norwegian", "norway"),
@@ -219,18 +232,19 @@ entities <- entities %>%
                                    "Sioux" = c("sioux", "sious"),
                                    "Cocopah" = c("cocopah_reservation", "cocopas", "cocopa"),
                                    "Moqui" = c("mokis", "moki", "moqui"),
-                                   "Salt River Pima–Maricopa Indian Community" = "pima_americopa_papago",
+                                   "Pima–Maricopa" = "pima_americopa_papago",
                                    "Kwakiutl" = "kwakiutl",
                                    "Richmond, KY" = "richmond",
-                                   "Venice, Italy" = "venice",
+                                   "Venice" = "venice",
                                    "Vermont" = "vermont",
                                    "Wisconsin" = "wisconsin"
   ))
 
-#based on the examination of the entities.count df, list tokens that must be removed from the entities df
-##if a token has less than 2 counts in the entities.count df, no need to include it in the false.tokens list
-###make sure to include"states" to avoid double counting "united states" when summarizing counts of "united" and "states"
-false.tokens <- c("st", "louis", "louisiana", "louisi", "louislana", "the", "city", " ", "  ", "states", "native", "mans", "delmar", "english", "east", "la", "west", "jefferson", "plaza", "republican", "al", "columbian", "dem", "dian", "sa", "smoking", "south", "womans", "vt", "christian", "county", "day", "democrat", "jand", "los", "louls", "loutsiana", "mo", "of", "panamerican", "us", "and", "bt", "coast", "democrats", "fu", "fort", "guards", "gulf_mexico", "kas", "medora", "nese", "north", "officiais", "reardon", "republicans", "sea", "sean", "smith", "sou", "thorpe", "to", "toledo", "willis", "   ", "12", "yt") 
+# based on the examination of the entities.count df, list tokens that must be removed from the entities df
+## if a token has less than 2 counts in the entities.count df, no need to include it in the false.tokens list
+### make sure to include "states" to avoid double counting "united states" when summarizing counts of "united" and "states"
+#### also remove mentions of "panamerican", spanishamerican", and "irishamerican" as, after close reading, these should not be assigned a place name
+false.tokens <- c("st", "louis", "louisiana", "louisi", "louislana", "loulsiana", "the", "city", " ", "  ", "states", "native", "mans", "delmar", "english", "east", "la", "west", "jefferson", "plaza", "republican", "al", "columbian", "dem", "dian", "sa", "smoking", "south", "womans", "vt", "christian", "county", "day", "democrat", "jand", "los", "louls", "loutsiana", "mo", "of", "panamerican", "us", "and", "bt", "coast", "democrats", "fu", "fort", "guards", "gulf_mexico", "kas", "medora", "nese", "north", "officiais", "reardon", "republicans", "sea", "sean", "smith", "sou", "thorpe", "to", "toledo", "willis", "   ", "12", "yt", "spanishamerican", "irishamericans", "panamerican", "hamburgamerican", "angloamerican", "germanamerican") 
 
 #remove false tokens
 entities <- entities %>% 
@@ -250,21 +264,38 @@ placenames <- placenames %>%
   arrange(desc(count))
 
 #create lists of place names by scale
-cities <- c()
-states <- c()
-countries <- c()
-continents <- c()
-native_nations <- c()
+
+data(world.cities) #get cities
+world.cities <- world.cities %>% 
+  mutate(name = ifelse(grepl("Havanna", name), "Havana", name)) #fix typo
+
+world.countries <- map_data("world") #get countries
+world.countries <- world.countries %>% 
+  mutate(region = ifelse(region == "USA", "United States", region)) #fix US name
+
+cities <- c((world.cities$name), "Alton", "Bridgeton", "Richmond, KY", "Venice")
+states <- c(state.name, "Washington DC")
+countries <- c(unique(world.countries$region), "United Kingdom", "Austria-Hungary", "Persia") 
+continents <- c("Latin America", "Africa", "Asia", "Europe")
+native_groups <- c("Kwakiutl", "Sioux", "Moqui", "Iroquois", "Cocopah", "Pima–Maricopa", "Muscogee Nation")
+geo_regions <- c("Patagonia", "Inner Mongolia")
 
 #create a new variable in the placenames df that distinguishes tokens by scale 
 #(i.e., city, state, country, continent, native_nation)
 placenames <- placenames %>% 
-  mutate(scale = ifelse(token %in% cities, "city",
-                        ifelse(token %in% states, "state",
-                               ifelse(token %in% countries, "country",
-                                      ifelse(token %in% continents, "continents",
-                                             ifelse(token %in% native_nations, "native_nation",
-                                                    "NA"))))))
+  mutate(scale = ifelse(place_name %in% cities, "city",
+                        ifelse(place_name %in% states, "state",
+                               ifelse(place_name %in% countries, "country",
+                                      ifelse(place_name %in% continents, "continent",
+                                             ifelse(place_name %in% native_groups, "native_group",
+                                                    ifelse(place_name %in% geo_regions, "geo_region",
+                                                    "NA")))))))
+
+#go in the placanames data frame and fix eventual errors in the scale column
+placenames <- placenames %>% 
+  mutate(scale = ifelse(place_name %in% c("China", "Mexico"), "country",
+                        ifelse(place_name == "Asia", "continent",
+                                      scale)))
 
 #### Geocoding ####
 
