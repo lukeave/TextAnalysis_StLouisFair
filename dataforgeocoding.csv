@@ -1,0 +1,107 @@
+,count,city,state,country,continent,geo_region,place_name
+1,287,Washington DC,NA,USA,NA,NA,United States
+2,194,Metro Manila,NA,Philippines,NA,NA,Philippines
+3,120,New York,New York,USA,NA,NA,New York
+4,105,Jefferson City,Missouri,USA,NA,NA,Missouri
+5,76,Berlin,NA,Germany,NA,NA,Germany
+6,72,Washington DC,NA,USA,NA,NA,Washington DC
+7,58,Tokio,NA,Japan,NA,NA,Japan
+8,54,Paris,NA,France,NA,NA,France
+9,51,Chicago,IL,USA,NA,NA,Chicago
+10,51,Beijing,NA,China,NA,NA,China
+11,43,Mexico City,NA,Mexico,NA,NA,Mexico
+12,42,London,NA,UK,NA,NA,United Kingdom
+13,39,Topeka,KS,USA,NA,NA,Kansas
+14,32,Austin,TX,USA,NA,NA,Texas
+15,30,Paris,NA,France,NA,NA,Paris
+16,27,Sacramento,California,USA,NA,NA,California
+17,25,Dublin,NA,Ireland,NA,NA,Ireland
+18,25,Moscow,NA,Russia,NA,NA,Russia
+19,22,Brasilia,NA,Brazil,NA,NA,Brazil
+20,22,San Francisco,California,USA,NA,NA,San Francisco
+21,20,Rome,NA,Italy,NA,NA,Italy
+22,20,Columbus,Ohio,USA,NA,NA,Ohio
+23,19,Ottawa,NA,Canada,NA,NA,Canada
+24,19,London,NA,UK,NA,NA,London
+25,18,NA,NA,Cocopah Reservation,NA,NA,Cocopah
+26,18,Indianapolis,Indiana,USA,NA,NA,Indiana
+27,18,New Orleans,Louisiana,USA,NA,NA,New Orleans
+28,15,Vienna,NA,Austria,NA,NA,Austria-Hungary
+29,15,The Hague,NA,Netherlands,NA,NA,Netherlands
+30,15,Toronto,NA,Canada,NA,NA,Toronto
+31,14,Juneau,Alaska,USA,NA,NA,Alaska
+32,14,Brussels,NA,Belgium,NA,NA,Belgium
+33,14,Springfield,Illinois,USA,NA,NA,Illinois
+34,14,Frankfort,Kentucky,USA,NA,NA,Kentucky
+35,11,Boston,Massachusetts,USA,NA,NA,Boston
+36,11,Denver,Colorado,USA,NA,NA,Colorado
+37,10,Havana,NA,Cuba,NA,NA,Cuba
+38,10,NA,NA,Hopi Reservation,NA,NA,Moqui
+39,10,Oklahoma City,Oklahoma,USA,NA,NA,Oklahoma
+40,10,NA,NA,Cheyenne River Reservation,NA,NA,Sioux
+41,9,Berlin,NA,Germany,NA,NA,Berlin
+42,9,NA,NA,NA,Latin America,NA,Latin America
+43,9,Richmond,Virginia,USA,NA,NA,Virginia
+44,8,NA,NA,NA,Africa,NA,Africa
+45,8,NA,NA,NA,Europe,NA,Europe
+46,8,Trenton,New Jersey,USA,NA,NA,New Jersey
+47,8,Stockholm,NA,Sweden,NA,NA,Sweden
+48,7,Little Rock,Arkansas,USA,NA,NA,Arkansas
+49,7,Jerusalem,NA,Israel,NA,NA,Jerusalem
+50,7,Philadelphia,Pennsylvania,USA,NA,NA,Philadelphia
+51,7,Salt Lake City,Utah,USA,NA,NA,Utah
+52,6,Helena,Montana,USA,NA,NA,Montana
+53,6,Philadelphia,Pennsylvania,USA,NA,NA,Pennsylvania
+54,5,Cincinnati,Ohio,USA,NA,NA,Cincinnati
+55,5,Des Moine,Iowa,USA,NA,NA,Iowa
+56,5,Minneapolis,Minnesota,USA,NA,NA,Minneapolis
+57,5,Pittsburg,Pennsylvania,USA,NA,NA,Pittsburg
+58,5,Rome,NA,Italy,NA,NA,Rome
+59,5,Madrid,NA,Spain,NA,NA,Spain
+60,5,Springfield,Illinois,USA,NA,NA,Springfield
+61,4,Phoenix,Arizona,USA,NA,NA,Arizona
+62,4,Denver,Colorado,USA,NA,NA,Denver
+63,4,Atlanta,Georgia,USA,NA,NA,Georgia
+64,4,Louisville,Kentucky,USA,NA,NA,Louisville
+65,4,Augusta,Maine,USA,NA,NA,Maine
+66,4,Annapolis,Maryland,USA,NA,NA,Maryland
+67,4,Carson City,Nevada,USA,NA,NA,Nevada
+68,4,Concord,New Hampshire,USA,NA,NA,New Hampshire
+69,4,Tehran,NA,Persia,NA,NA,Persia
+70,4,Damascus,NA,Syria,NA,NA,Syria
+71,3,NA,NA,NA,Asia,NA,Asia
+72,3,Atlanta,Georgia,USA,NA,NA,Atlanta
+73,3,Hartford,Connecticut,USA,NA,NA,Connecticut
+74,3,Dallas,Texas,USA,NA,NA,Dallas
+75,3,Havana,NA,Cuba,NA,NA,Havana
+76,3,Houston,Texas,USA,NA,NA,Houston
+77,3,Milwaukee,Wisconsin,USA,NA,NA,Milwaukee
+78,3,Saint Paul,Minnesota,USA,NA,NA,Minnesota
+79,3,Jackson,Mississippi,USA,NA,NA,Mississippi
+80,3,Oslo,NA,Norway,NA,NA,Norway
+81,3,Salem,Oregon,USA,NA,NA,Oregon
+82,3,NA,NA,Salt River Pima-Maricopa Indian Community,NA,NA,Pima-Maricopa
+83,3,Sacramento,California,USA,NA,NA,Sacramento
+84,3,Vienna,NA,Austria,NA,NA,Vienna
+85,2,Alton,Illinois,USA,NA,NA,Alton
+86,2,Buenos Aires,NA,Argentina,NA,NA,Argentina
+87,2,Baltimore,Maryland,USA,NA,NA,Baltimore
+88,2,Birmingham,Alabama,USA,NA,NA,Birmingham
+89,2,Bridgeton,New Jersey,USA,NA,NA,Bridgeton
+90,2,Cairo,Illinois,USA,NA,NA,Cairo
+91,2,Copenhagen,NA,Denmark,NA,NA,Denmark
+92,2,Boise,Idaho,USA,NA,NA,Idaho
+93,2,NA,NA,NA,NA,Inner Mongolia,Inner Mongolia
+94,2,NA,British Columbia,Canada,NA,NA,Kwakiutl
+95,2,Los Angeles,Nevada,USA,NA,NA,Los Angeles
+96,2,NA,NA,Muscogee (Creek) Nation,NA,NA,Muscogee Nation
+97,2,Nashville,Tennessee,USA,NA,NA,Nashville
+98,2,Managua,NA,Nicaragua,NA,NA,Nicaragua
+99,2,Santa Cruz,NA,Argentina,NA,Patagonia,Patagonia
+100,2,Lisbon,NA,Portugal,NA,NA,Portugal
+101,2,Richmond,Kentucky,USA,NA,NA,Richmond
+102,2,Bern,NA,Switzerland,NA,NA,Switzerland
+103,2,Venice,NA,Italy,NA,NA,Venice
+104,2,Montpelier,Vermont,USA,NA,NA,Vermont
+105,2,Madison,Wisconsin,USA,NA,NA,Wisconsin
+106,2,Harare,NA,Zimbabwe,NA,NA,Zimbabwe

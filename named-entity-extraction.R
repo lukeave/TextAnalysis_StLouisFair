@@ -9,6 +9,7 @@ library(maps)
 library(tidygeocoder)
 library(stringr)
 library(dplyr)
+library(tidyr)
 
 #### Named Entity Extraction ####
 
@@ -64,7 +65,6 @@ entities <- entities %>%
                              ifelse(rowid %in% c(2479, 34621), "CCP", #Cocopah
                                     ifelse(rowid %in% c(50680, 50933), "GM", #Gulf of Mexico
                                            annotation))))
-
 
 # catch accurate place references for all occurrences of South, Central, and Latin America
 ## collapse occurrences into one ("Latin America") since historically these have been used interchangeably.
@@ -240,6 +240,8 @@ entities <- entities %>%
                                    "Wisconsin" = "wisconsin"
   ))
 
+entities$place_name <- entities$place_name %>% 
+  as.character()
 # based on the examination of the entities.count df, list tokens that must be removed from the entities df
 ## if a token has less than 2 counts in the entities.count df, no need to include it in the false.tokens list
 ### make sure to include "states" to avoid double counting "united states" when summarizing counts of "united" and "states"
@@ -297,6 +299,35 @@ placenames <- placenames %>%
                         ifelse(place_name == "Asia", "continent",
                                       scale)))
 
+write.csv(placenames, file = "placenames.csv")
+
 #### Geocoding ####
 
+#make the data frame longer in order to geocode
 
+long.placenames <- placenames %>% 
+  mutate(row = row_number())
+
+long.placenames <- long.placenames %>%
+  pivot_wider(names_from = scale, values_from = place_name) %>% 
+#reorder columns per scale
+  select(count, city, state, country, native_group, continent, geo_region)
+#write the data frame into a new file and complete observations manually.
+write.csv(long.placenames, file = "dataforgeocoding.csv")
+
+long.placenames <- read.csv("dataforgeocoding.csv")
+long.placenames <- long.placenames %>% 
+  unite("geo_address", city:geo_region, sep = ", ", na.rm = TRUE, remove = FALSE) %>% 
+  select(place_name, count, city, state, country, continent, geo_region, geo_address)
+
+#geocode place names with Google
+register_google(key = Sys.getenv("GOOGLEGEOCODE_API_KEY"))
+
+geocoded.data <- geocode(long.placenames, address = geo_address, method='google', lat = latitude, long = longitude)
+#store geocoded data in a csv file
+## manually geocode any missing observations (seemingly, just one - Muscogee Creek Nation)
+write.csv(geocoded.data, "geocoded.data.csv")
+geocoded.data <- read.csv("geocoded.data.csv") #after manually geocoding Muscogee Nation
+
+geocoded.data <- geocoded.data %>% 
+  select(place_name, count, geo_address, latitude, longitude)
