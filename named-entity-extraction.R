@@ -303,35 +303,36 @@ write.csv(placenames, file = "placenames.csv")
 
 #### Geocoding ####
 
-#make the data frame longer in order to geocode
+#make the data frame wider in order to geocode
 
-long.placenames <- placenames %>% 
+wide.placenames <- placenames %>% 
   mutate(row = row_number())
 
-long.placenames <- long.placenames %>%
+wide.placenames <- wide.placenames %>%
   pivot_wider(names_from = scale, values_from = place_name) %>% 
 #reorder columns per scale
   select(count, city, state, country, native_group, continent, geo_region)
 #write the data frame into a new file and complete observations manually.
-write.csv(long.placenames, file = "dataforgeocoding.csv")
-
-long.placenames <- read.csv("dataforgeocoding.csv")
-long.placenames <- long.placenames %>% 
+write.csv(wide.placenames, file = "wide_placenames.csv")
+#save data frame with manually completed observations and place names in new file called dataforgeocoding.csv
+#read in new data frame for geocoding
+wide.placenames <- read.csv("dataforgeocoding.csv")
+wide.placenames <- wide.placenames %>% 
   unite("geo_address", city:geo_region, sep = ", ", na.rm = TRUE, remove = FALSE) %>% 
   select(place_name, count, city, state, country, continent, geo_region, geo_address)
 
 #geocode place names with Google
 register_google(key = Sys.getenv("GOOGLEGEOCODE_API_KEY"))
 
-geocoded.data <- geocode(long.placenames, address = geo_address, method='google', lat = latitude, long = longitude)
+geocoded.data <- geocode(wide.placenames, address = geo_address, method='google', lat = latitude, long = longitude)
 #store geocoded data in a csv file
-## manually geocode any missing observations (seemingly, just one - Muscogee Creek Nation)
 write.csv(geocoded.data, "geocoded.data.csv")
-geocoded.data <- read.csv("geocoded.data.csv") #after manually geocoding Muscogee Nation
+## manually geocode any missing observations (seemingly, just one - Muscogee Creek Nation)
+geocoded.data <- read.csv("geocoded.data.csv") #read in data after manually geocoding Muscogee Nation
 
 geocoded.data <- geocoded.data %>% 
   select(place_name, count, geo_address, latitude, longitude)
-rm(long.placenames)
+rm(wide.placenames)
 
 #add scale column to the new geocoded data df
 geocoded.data <- left_join(geocoded.data, placenames)

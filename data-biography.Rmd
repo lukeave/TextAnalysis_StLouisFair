@@ -1,0 +1,37 @@
+---
+title: "data-biography"
+author: "Lucas avelar"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Documenting Methodological Decisions and Interventions to the Data
+
+#### Close Reading of Entities data ("parsedtxt")
+
+Entity types (from `spacY`) that were relevant for this analysis:\
+NORP: Nationalities or religious or political groups.\
+ORG: Companies, agencies, institutions, etc.\
+GPE: Countries, cities, states.
+
+-   the `parsedtxt` data frame resulted from the application of `spacy_parse()` to the `text.data`. It contained 209,210 entries, each being a token followed by its file, its lemma, positionality in the sentence, and entity classification. With close reading, I realized some preliminary problems in this data. First, tokens like *philippines*, besides presenting variations like *pollippines* and *filipines*, were either classified as `ORG` (Companies, agencies, institutions, etc) or not assigned an entity type at all. Since I wanted the Philippines to be included in the place name count, I had to manually assign all the occurrences with the entity type `ORG` to be able to filter the data by `GPE`, `NORP`, or `ORG`.
+
+-   When "United States" showed up as adjective to a noun (i.e., "United States senator"), it was still counted as a place name. For the sake of the argument put forward in this project, I understand that the mere appearance of the term in newspapers contributed to an imagined geography of modernity. The world's fair is a metaphor in itself, and to refer to the "American committee", or to the "Chinese village", for example, is to refer to a geographical place in the globe, even if not as precisely geolocated as references like New York or Chicago can be.
+
+-   Nationalities and ethnicities were manually assigned a place name based on where in the globe each group was perceived to be originally from in 1904. This is justifiable because of the very nature of the world's fair: every cultural or ethnic group present on the fairgrounds was considered to be representing a place in the world.
+
+-   As an example of data interventions I have done, "East Africa" appearances in the entities data were assigned the place name "German East Africa" to reflect the historical context in which the term shows up in the corpus. This particular case is rather irrelevant for the analysis since it only showed up twice in the corpus.
+
+-   After doing close reading, I realized that the typo "affican" (row index 403 in the Entities data) referred to "African pygmies", an ethnic group native to the Congo Basin region. In order to plot it on the map, I have assigned lat and long coordinates of "Central Africa" to said entity.
+
+-   When translating each occurrence of the token "new" in the `entities` data frame, I realized that, some times, `spacy_parse()` only recognized 2 occurrences as named entities in a text file even though said file would have 3 occurrences, each referring to a different place (i.e. "New York", "New Jersey", "New Orleans"). What I have decided to do here is to translate one occurrence to "New Jersey" and the other to "New Orleans", ignoring the "New York" occurrence. This is because, statistically, New York occurrences are significantly higher than New Jersey or New Orleans. For analytic purposes, taking every occurrence of New Orleans and New Jersey can change the analysis results while omitting one of the many occurrences of New York will not affect the results as much.
+
+-   In 1904, with the Russo-Japanese war happening simultaneously to the world's fair, the region of Manchuria was the target of imperialistic and expansionist policies from the Russian Empire and the Empire of Japan. In order to plot the occurrences of "manchuria" on the map, I assigned them general lat and long coordinates of present-day Inner Mongolia. Similarly, occurrences of Rhodesia referred to the region in Southern-Central Africa now divided into Zambabwe and Zambia. References in the corpus were about the Agricultural exhibits by the British colony of Rhodesia, that would be first split into Northern and Southern Rhodesia in 1911.
+
+-   From a first glance at the `entities.count` data frame, the token "united" is among the most frequent terms. The `spacy_extract_entity()` function can help in distinguishing UK from US among the named entities. I decided, however, not to rely on this function for the main analysis because it is more limited: for example, it does not recognize nearly as many instances of Philippines as an entity. Even if `spacy_parse()` is also limited in recognizing some important terms as entities, they still show up in the `parsedtxt` data frame, which allows me to perform manual interventions to the data and assign an entity type (`GPE` or `NORP`) to named entities not recognized by the algorithm. The output of `spacy_extrat_entity(text.data)` suggests that only 1 out of 149 occurrences of "united" that the algorithm recognizes as entities refers to the United Kingdom in the corpus, while 148 occurrences refer to the United States. In this sense, I ignored that as irrelevant noise in the data and assigned the place name of "United States" to every occurrence of "united" resulting from `spacy_parse(text.data)`.\
+
+-   In most cases, for computational purposes, the wide data format is less than ideal. However, for the geocoding process, I used `pivot_wider()` to increase the number of columns and decreasing the number of rows in the `placenames` data frame.
