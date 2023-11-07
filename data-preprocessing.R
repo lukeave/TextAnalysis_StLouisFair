@@ -9,9 +9,6 @@ library(tidygeocoder)
 library(stringr)
 library(dplyr)
 
-#set working directory
-setwd(dir = "~/Desktop/Ph.D. Digital History/4. FALL 2023/HIST 8550 Seminar in Digital History")
-
 #### Tesseract ####
 
 #establish tesseract language parameters
