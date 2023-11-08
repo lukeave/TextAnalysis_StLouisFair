@@ -9,13 +9,20 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{css, echo=FALSE}
+img[src*='#center'] { 
+    display: block;
+    margin: auto;
+}
+```
+
 <h3> 1.  Introduction </h3>
 
 On the first day of December 1904, the last day of a carefully planned urban utopia brought together people from many different places and backgrounds to experience the world's fair for the last time.[^1] At least two-hundred-thousand people gathered on the grounds of the Louisiana Purchase Exhibition sharing mixed feelings of sadness, wonder, and nostalgia. Some visitors traveled a couple blocks to see the fair and its president David R. Francis for the last time. Others would soon be leaving the United States after seven months of transiting between cultural universes by walking. It was the so-called Francis Day: the grand spectacle of colors, shapes, tastes, and sounds was about to vanish from the city as if it never happened. </p>
 
 <p>   For the last time, fair officials marched from the administration entrance through Skinker Road. After stopping at the Administration building, Francis and other commissioners continued the march towards the Louisiana Monument at the core of the fairgrounds. Behind the monument, separated by the Great Basin, two of the main exhibit buildings, surrounded by thoughtfully designed water ways, contributed to a generalized sense of order.[^2] Francis, Governor Dockery, and other members of the local political elite stood in front of the north side of the monument and addressed the crowd with their closing speeches. Governor Dockery said that the fair's lesson was made evident to every visiting foreigner: that the United States was "the greatest nation in all the world." He also made sure to address the foreign commissioners gathered around the monument to warn them about an ongoing "war of peaceful conquest." Said war, he argued, would prove to every nation in the world the United States' economic and commercial supremacy.[^3] </p>
 
-![Figure 1: Area-focused map of the St Louis World's Fair grounds. On Francis Day, fair officials entered through Skinker Road (bottom right) and followed through the outskirts of the Pike to reach the Louisiana Monument by the Great Basin. Library of Congress. <https://www.loc.gov/item/99466762/>](../Data_Visualizations/images/St-Louis-Fair-Map_LOC.png)
+![Figure 1: Area-focused map of the St Louis World's Fair grounds. On Francis Day, fair officials entered through Skinker Road (bottom right) and followed through the outskirts of the Pike to reach the Louisiana Monument by the Great Basin. Library of Congress. <https://www.loc.gov/item/99466762/>](../Data_Visualizations/images/St-Louis-Fair-Map_LOC.png#center)</p>
 
 <p>   Throughout the nineteenth and twentieth centuries, world’s fairs became the stages of planned urban utopia in which political and cultural groups negotiated their economic power, symbolic prestige, and modern collective identities.[^4] It is unlikely that the crowd heard what governor Dockery said in a world where microphones and amplifiers did not exist.[^5] If fairgoers did not hear it, however, the symbolic arrangement of the space echoed the governor’s words, and Francis and other American commissioners listened proudly while foreign elite representatives applauded. The fair in St Louis showcased a spatial narrative strongly dependent on the participation of foreign nations and other cultural groups to represent the “uneducated” and “uncivilized.” This article seeks to investigate how local newspapers perceived, experienced, and produced textual representations of a spatially oriented notion of modernity, based on a strong sense of otherness, that underpinned the arrangement of the fair.</p>
 
@@ -35,7 +42,7 @@ On the first day of December 1904, the last day of a carefully planned urban uto
 
 In the morning of the last day of April, immediately before David Francis made official the opening of the world’s fair, Secretary of War William H. Taft, representing President Roosevelt, was trusted with the responsibility to give one final address to the thousands of people attending the ceremony. After saying that the fair was “the union of nations in a progress toward higher material and spiritual existence,” Taft emphasized that “the government of the Philippine Islands has felt justified in expending a very large sum of money to make the people who come here to commemorate the vindication of one great effort of American enterprise and expansion understand the conditions which surround the beginning of another.” The centennial of the Louisiana Purchase, he contended, marked “the beginning of the great Philippine problem”.[^13]</p>
 
-## TO BE COMPLETED ## 
+[TO BE COMPLETED]
 
 <h3> Extracting Place Names </h3>
 
@@ -51,7 +58,9 @@ Between the first and the last day of the fair, The St Louis Republic, the St. L
 
 <p>   After many interventions and data cleaning, the final data set of placenames contained 106 unique observations, each presenting one place name extracted from the corpus, the count, and its geographical scale (city, state, country, or region). As seen in Figure 2 below, the two most frequent place names were United States and Philippines, with 287 and 194 occurrences respectively. This result in itself significantly reinforces the core argument of this project: that the spatial narrative of modernity embedded on the grounds of the fair in St Louis was greatly dependent on the otherization of the East. It was indeed a comparative view of the world, like any other world’s fair: in order to showcase and praise the progress of the civilized West, it had to show its counterpoint.</p>
 
-![Figure 2: Visualization of Extracted Place-names. Tableau, 2023.](../Data_Visualizations/tableau/placenames-viz.png)
+![Figure 2: Visualization of Extracted Place-names. Tableau, 2023.](../Data_Visualizations/tableau/placenames-viz.png#center)</p>
+
+<p>     </p>
 ---
 [^1]: "Francis Honored Guest of World on Last Day of Exposition," <i>The St. Louis Republic</i>, December 02, 1904.
 [^2]: In his account of the Chicago World's Fair of 1893, historian James Gilbert argued that the event reflected utopian ideals of the city. Although not always successful, fair organizers tried to present a controlled urban environment and impose a specific social and cultural order to the audiences. James Gilbert, <i>Perfect Cities: Chicago's Utopias of 1893</i> (The University of Chicago Press, 1991), 15.
