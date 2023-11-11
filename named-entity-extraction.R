@@ -27,7 +27,8 @@ parsedtxt <- parsedtxt %>%
   mutate(entity = ifelse(grepl("siou", token), "NORP", entity)) %>% 
   mutate(entity = ifelse(grepl("troquois", token), "NORP", entity)) %>% 
   mutate(entity = ifelse(grepl("moqui", token) | grepl("moki", token),"NORP", entity)) %>% 
-  mutate(entity = ifelse(grepl("zuni", token), "NORP", entity))
+  mutate(entity = ifelse(grepl("zuni", token), "NORP", entity)) %>% 
+  mutate(entity = ifelse(grepl("igorr", token), "NORP", entity))
 #assign "NORP" as entity type to every instance of "america*" and its variations in the data 
 #the actual entities data will be cleaned later, and tokens mistakenly classified as entities will be removed
 parsedtxt <- parsedtxt %>% 
@@ -155,7 +156,7 @@ entities <- entities %>%
                                    "Italy" = c("italy", "italian", "italians"),
                                    "Boston" = "boston",
                                    "Colorado" = "colorado",
-                                   "Philippines" = c("filipino", "filipinos", "fillpino","philippine","philippines","philip", "philipines","philipipne", "philippiies", "philipping","philippne", "filipines", "filipind", "filipinas", "filipine", "filipiso", "filipiz", "filiplines", "visayan", "visayans", "visaran", "visayas", "visaydn", "manila"),
+                                   "Philippines" = c("filipino", "filipinos", "fillpino","philippine","philippines","philip", "philipines","philipipne", "philippiies", "philipping","philippne", "filipines", "filipind", "filipinas", "filipine", "filipiso", "filipiz", "filiplines", "visayan", "visayans", "visaran", "visayas", "visaydn", "manila", "igorrotes", "igorrote", "igorrcte"),
                                    "Oklahoma" = "oklahoma",
                                    "Austria-Hungary" = c("austrohungarian", "austrian", "austria", "hungary"),
                                    "Berlin" = "berlin",
@@ -231,10 +232,10 @@ entities <- entities %>%
                                    "Iroquois" = "troquois",
                                    "Sioux" = c("sioux", "sious"),
                                    "Cocopah" = c("cocopah_reservation", "cocopas", "cocopa"),
-                                   "Moqui" = c("mokis", "moki", "moqui"),
-                                   "Pima–Maricopa" = "pima_americopa_papago",
+                                   "Hopi" = c("mokis", "moki", "moqui"),
+                                   "Pima-Maricopa" = "pima_americopa_papago",
                                    "Kwakiutl" = "kwakiutl",
-                                   "Richmond, KY" = "richmond",
+                                   "Richmond" = "richmond",
                                    "Venice" = "venice",
                                    "Vermont" = "vermont",
                                    "Wisconsin" = "wisconsin"
@@ -293,49 +294,117 @@ placenames <- placenames %>%
                                                     ifelse(place_name %in% geo_regions, "geo_region",
                                                     "NA")))))))
 
-#go in the placanames data frame and fix eventual errors in the scale column
+#go in the placenames data frame and fix eventual errors in the scale column
 placenames <- placenames %>% 
   mutate(scale = ifelse(place_name %in% c("China", "Mexico"), "country",
                         ifelse(place_name == "Asia", "continent",
                                       scale)))
 
-write.csv(placenames, file = "placenames.csv")
-
 #### Geocoding ####
 
 #make the data frame wider in order to geocode
 
-wide.placenames <- placenames %>% 
-  mutate(row = row_number())
+placenames <- placenames %>% 
+  mutate(rowid = row_number())
 
-wide.placenames <- wide.placenames %>%
+wide.placenames <- placenames %>%
   pivot_wider(names_from = scale, values_from = place_name) %>% 
 #reorder columns per scale
-  select(count, city, state, country, native_group, continent, geo_region)
+  select(rowid, count, city, state, country, native_group, continent, geo_region)
+
+wide.placenames <- left_join(wide.placenames, placenames) %>% 
+  select(rowid, count, city, state, country, native_group, continent, geo_region, place_name)
 #write the data frame into a new file and complete observations manually.
-write.csv(wide.placenames, file = "wide_placenames.csv")
+
+###REPLACE CODE CHUNK BELOW WITH NEW ONE THAT DOES THE SAME BUT IN RSTUDIO
+
+#write.csv(wide.placenames, file = "wide_placenames.csv", row.names = FALSE)
 #save data frame with manually completed observations and place names in new file called dataforgeocoding.csv
 #read in new data frame for geocoding
-wide.placenames <- read.csv("dataforgeocoding.csv")
+#wide.placenames <- read.csv("dataforgeocoding.csv")
+
+wide.placenames <- wide.placenames %>% 
+  mutate(city = case_when(
+    place_name == "United States" ~ "Washington DC",
+    place_name == "Philippines" ~ "Metro Manila",
+    place_name == "Missouri"~ "Jefferson City",
+    place_name == "Germany" ~ "Berlin",
+    place_name == "Japan" ~ "Tokio",
+    place_name == "France" ~ "Paris",
+    place_name == "China" ~ "Beijing",
+    place_name == "Mexico" ~ "Mexico City",
+    place_name == "United Kingdom" ~ "London",
+    place_name == "Kansas" ~ "Topeka",
+    place_name == "Texas" ~ "Austin",
+    place_name == "California" ~ "Sacramento",
+    place_name == "Ireland" ~ "Dublin",
+    place_name == "Russia" ~ "Moscow",
+    place_name == "Brazil" ~ "Brasilia",
+    place_name == "Italy" ~ "Rome",
+    place_name == "Ohio" ~ "Columbus",
+    place_name == "Canada" ~ "Ottawa",
+    place_name == "Indiana" ~ "Indianapolis",
+    place_name == "Austria-Hungary" ~ "Vienna",
+    place_name == "Netherlands" ~ "The Hague",
+    place_name == "Alaska" ~ "Juneau",
+    place_name == "Belgium" ~ "Brussels", 
+    place_name == "Illinois" ~ "Springfield",
+    place_name == "Kentucky" ~ "Frankfort",
+    place_name == "Colorado" ~ "Denver",
+    place_name == "Cuba" ~ "Havana",
+    place_name == "Oklahoma" ~ "Oklahoma City",
+    place_name == "Virginia" ~ "Richmond",
+    place_name == "New Jersey" ~ "Trenton",
+    place_name == "Sweden" ~ "Stockholm",
+    place_name == "Arkansas" ~ "Little Rock",
+    place_name == "Utah" ~ "Salt Lake City",
+    place_name == "Montana" ~ "Helena",
+    place_name == "Pennsylvania" ~ "Philadelphia",
+    place_name == "Iowa" ~ "Des Moine",
+    place_name == "Spain" ~ "Madrid",
+    place_name == "Arizona" ~ "Phoenix",
+    place_name == "Georgia" ~ "Atlanta",
+    place_name == "Maine" ~ "Augusta",
+    place_name == "Maryland" ~ "Annapolis",
+    place_name == "Nevada" ~ "Carson City",
+    place_name == "New Hampshire" ~ "Concord",
+    place_name == "Persia" ~ "Tehran",
+    place_name == "Syria" ~ "Damascus",
+    place_name == "Connecticut" ~ "Hartford",
+    place_name == "Minnesota" ~ "Saint Paul",
+    place_name == "Mississippi" ~ "Jackson",
+    place_name == "Norway" ~ "Oslo",
+    place_name == "Oregon" ~ "Salem",
+    place_name == "Argentina" ~ "Buenos Aires",
+    place_name == "Denmark" ~ "Copenhagen",
+    place_name == "Idaho" ~ "Boise",
+    place_name == "Nicaragua" ~ "Managua",
+    place_name == "Patagonia" ~ "Santa Cruz",
+    place_name == "Portugal" ~ "Lisbon",
+    place_name == "Switzerland" ~ "Bern",
+    place_name == "Vermont" ~ "Montpelier",
+    place_name == "Wisconsin", "Madison",
+    place_name == "Zimbabwe", "Harare",
+    city))
+
 wide.placenames <- wide.placenames %>% 
   unite("geo_address", city:geo_region, sep = ", ", na.rm = TRUE, remove = FALSE) %>% 
-  select(place_name, count, city, state, country, continent, geo_region, geo_address)
+  select(place_name, count, city, state, country, native_group, continent, geo_region, geo_address)
 
 #geocode place names with Google
 register_google(key = Sys.getenv("GOOGLEGEOCODE_API_KEY"))
 
 geocoded.data <- geocode(wide.placenames, address = geo_address, method='google', lat = latitude, long = longitude)
 #store geocoded data in a csv file
-write.csv(geocoded.data, "geocoded.data.csv")
-## manually geocode any missing observations (seemingly, just one - Muscogee Creek Nation)
-geocoded.data <- read.csv("geocoded.data.csv") #read in data after manually geocoding Muscogee Nation
+write.csv(geocoded.data, "google_geodata.csv")
+
 
 geocoded.data <- geocoded.data %>% 
   select(place_name, count, geo_address, latitude, longitude)
 rm(wide.placenames)
 
 #add scale column to the new geocoded data df
-geocoded.data <- left_join(geocoded.data, placenames)
-geocoded.data <- geocoded.data[,-6]
+geocoded.data <- left_join(geocoded.data, placenames) %>% 
+  select(rowid, place_name, count, geo_address, scale, latitude, longitude)
 
 write.csv(geocoded.data, "geocoded_placenames.csv")

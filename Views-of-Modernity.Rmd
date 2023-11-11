@@ -1,6 +1,6 @@
 ---
 title: "Views of Modernity in Space: Distant Reading the experience, perception, and representation of geopolitical entities in local newspapers during the St Louis 1904 World’s Fair"
-author: "Lucas avelar"
+author: "Lucas Avelar"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -16,7 +16,7 @@ img[src*='#center'] {
 }
 ```
 
-<h3> 1.  Introduction </h3>
+### 1.  Introduction 
 
 On the first day of December 1904, the last day of a carefully planned urban utopia brought together people from many different places and backgrounds to experience the world's fair for the last time.[^1] At least two-hundred-thousand people gathered on the grounds of the Louisiana Purchase Exhibition sharing mixed feelings of sadness, wonder, and nostalgia. Some visitors traveled a couple blocks to see the fair and its president David R. Francis for the last time. Others would soon be leaving the United States after seven months of transiting between cultural universes by walking. It was the so-called Francis Day: the grand spectacle of colors, shapes, tastes, and sounds was about to vanish from the city as if it never happened. </p>
 
@@ -38,13 +38,27 @@ On the first day of December 1904, the last day of a carefully planned urban uto
 
 <p>   With a digitally driven argument, this article further contributes to scholarship on world’s fairs as symbolic universes in two ways: first, it demonstrates how methodologies of digital humanities like distant reading, word vector analysis, and named entity recognition can provide historians with new ways to assess the experience of fairgoers and whether visitors perceived the fair’s discourse of modernity. Second, it pushes for a closer attention to the role of newspapers as a particular kind of audience to the fair’s message: one that attends not only to the message, but to the ways in which other audiences perceive and engage with it. By considering and talking about the spatial experiences of visitors, newspapers produced complex discursive representations of participating cultures, and therefore, of the modernizing world.</p>
 
-<h3> "Open, ye gates," and let them "learn the lesson" </h3>
+### "Open, ye gates," and let them "learn the lesson"
 
-In the morning of the last day of April, immediately before David Francis made official the opening of the world’s fair, Secretary of War William H. Taft, representing President Roosevelt, was trusted with the responsibility to give one final address to the thousands of people attending the ceremony. After saying that the fair was “the union of nations in a progress toward higher material and spiritual existence,” Taft emphasized that “the government of the Philippine Islands has felt justified in expending a very large sum of money to make the people who come here to commemorate the vindication of one great effort of American enterprise and expansion understand the conditions which surround the beginning of another.” The centennial of the Louisiana Purchase, he contended, marked “the beginning of the great Philippine problem”.[^13]</p>
+In the morning of the last day of April, immediately before David Francis made official the opening of the world’s fair, Secretary of War William H. Taft, representing President Roosevelt, was trusted with the responsibility to give one final address to the thousands of people attending the ceremony. Taft said that the fair was “the union of nations in a progress toward higher material and spiritual existence.” But his speech emphasized that “the government of the Philippine Islands has felt justified in expending a very large sum of money to make the people who come here to commemorate the vindication of one great effort of American enterprise and expansion understand the conditions which surround the beginning of another.” The centennial of the Louisiana Purchase, he contended, marked “the beginning of the great Philippine problem”.[^13] After Taft's speech, Francis sent the signal to the White House for Theodore Roosevelt to press the golden telegraph key that would provide electricity to the entire exposition. "Open, ye gates, spring wide ye portals," said Francis, while urging visitors to "behold the achievements of your race: learn the lesson here tonight and gather from it inspiration to still greater achievements." [^20]</p>
+
+<p> The lesson to be learned within the gates was not only about the world's achievements, but even more so about what made America so exceptional at the turn of the century. Late-nineteenth-century American historian Frederick Jackson Turner was right to suggest that any explanation of American history had to come to terms with the notion of the frontier and its implications. He contended, "the frontier is the outer edge of the wave -- the meeting point between savagery and civilization."[^21] Turner's idealization of the American national identity as exceptional has been rejected in twentieth-century historiography, but indeed, as Thomas Bender has argued, throughout most of the nineteenth century, the American perspective on the Pacific and East Asia had much to do with the American expansionist ambitions towards the west.[^22] When Turner contended that the continental frontier was closed in 1893, American politics had already been concerned about the next chapter of the American history of expansion.[^23] The political and economic context prior to the turn of the century and the commemoration of the Louisiana Purchase in 1904 are key to the understanding of Taft's statement and the centrality of the Philippine exhibit at the fair.</p> 
+
+<p>Turner did not deny that the American "energies of expansion" were to be directed overseas with the settlement of the Pacific coast. In fact, by the 1890s, he observed "the demands for a vigorous foreign policy, [...] and for the extension of American influence to outlying islands and adjoining countries" as symptoms of a continuity between the settlement of the West and a larger imperialistic movement abroad.[^24] The American colonial endeavors in the Philippines by the end of the century were the most ubiquitous evidence to the historical continuity that Turner observed. As Bender has pointed out, much similarly to the process of removal of the Native American people or the occupation and acquisition of Mexican territory throughout the 1820s, 1830s, and 1840s, the global extension of American culture was part of a much larger American imperial praxis justified by a common "message of uplift and modernization."[^25] Given the unique complex aspects of each of these events as historical processes, a comparative analysis is nonetheless possible for it sheds light on the mentality of American politicians and fair makers regarding the Philippine people during the world's fair of 1904.</p>
+
+<p> If the early European rhetoric of empire and land appropriation was largely based on religious justification, by the late nineteenth century, the United States gradually sought legitimization for its imperial actions less on terms of American Christianism and more on economic development and notions of racial hierarchy. The Manifest Destiny, in Bender's words, had become "as much a racial concept as a political one, about the rights (and responsibilities, too, it was believed) of 'civilized' nations to rule lesser, uncivilized peoples."[^26] By the 1890s, and based on the racial and political premise of American superiority, the McKinley Administration used the unstable political circumstances in Cuba to get involved in the war against Spain and justify the annexation of Hawaii.[^27] Further, defeating Spain in the Spanish-American War in the name of "freedom" and Cuban independence resulted in the United States acquiring sovereignty over the Philippines as well as the territories of Guam and Puerto Rico.[^28]</p>
+
+<p> But the American lingering presence in the Philippines, in particular, did not come without controversy and domestic opposition. Anti-imperialist Americans often looked at racial hierarchy to argue against incorporation of allegedly inferior people since it would legally provide them with  American citizenship status.[^29] Further, as historian Paul A. Kramer has demonstrated, during the U.S. Troops occupation of Manila, local compromises on the ground between American diplomats and Filipino insurgents caused tensions and diverged from what the U.S. State Department had envisioned for American sovereignty over the islands.[^30] A competition of state-building strategies between Filipino officials and U.S. commanders followed the Spanish defeat. To add to the complexity of the power dynamics at play, Filipino leaders often recurred to the language of "civilization" in seeking international recognition of the Revolution and Emilio Aguinaldo's self-sufficient government. [^31] If Aguinaldo and his diplomatic representatives could convince the United States of the civilized character of the insurgent Filipino government, they thought, the American troops had no reason to stay in control of Manila.</p>
+
+<p> With the civilization rhetoric being a crucial strategy for self-determination and self-governance, Filipino leaders also needed to convince their own population, stratified in class and racial terms, that the civilized capacity of their people was ubiquitous in the islands. The problem of cultural representation was such a central matter that, in 1904, debates about whether to enable American diplomats to take Igorrotte
+
 
 [TO BE COMPLETED]
 
-<h3> Extracting Place Names </h3>
+
+
+
+### Extracting Place Names
 
 Between the first and the last day of the fair, The St Louis Republic, the St. Louis Globe-Democrat, and the St. Louis Post-Dispatch were three of the most important local newspapers reporting about and from the world’s fair. These newspapers were representative of a class of cultural commentators that established narrative hegemony about American culture and politics in the city of St Louis throughout the latter half of the nineteenth century. By the turn of the century, the Post-Dispatch became a “thoroughly national newspaper” with broad interests in issues of national scale.[^14] The Globe-Democrat printed an average of five and one-half columns daily about the world’s fair between June 1901, when the organization of the exposition started, to December 1904, when it closed. Similarly, the Republic and the Post-Dispatch printed the equivalent of 1,012 and 988 pages respectively during the same period.[^15]</p>
 
@@ -58,7 +72,7 @@ Between the first and the last day of the fair, The St Louis Republic, the St. L
 
 <p>   After many interventions and data cleaning, the final data set of placenames contained 106 unique observations, each presenting one place name extracted from the corpus, the count, and its geographical scale (city, state, country, or region). As seen in Figure 2 below, the two most frequent place names were United States and Philippines, with 287 and 194 occurrences respectively. This result in itself significantly reinforces the core argument of this project: that the spatial narrative of modernity embedded on the grounds of the fair in St Louis was greatly dependent on the otherization of the East. It was indeed a comparative view of the world, like any other world’s fair: in order to showcase and praise the progress of the civilized West, it had to show its counterpoint.</p>
 
-![Figure 2: Visualization of Extracted Place-names. Tableau, 2023.](../Data_Visualizations/tableau/placenames-viz.png#center)</p>
+![Figure 2: Most mentioned place-names in the <i>St Louis Post-Dispatch</i>, <i>The St Louis Republic</i>, and the <i>St. Louis Globe-Democrat</i> during the months of the world's fair.](../Data_Visualizations/tableau/placenames-viz.png#center)</p>
 
 <p>     </p>
 ---
@@ -75,6 +89,18 @@ Between the first and the last day of the fair, The St Louis Republic, the St. L
 [^11]: “Igorrotes on Way to Island Home,” <i>The St. Louis Republic</i>, December 02, 1904.
 [^12]: Martha Clevenger edited an important account on the St Louis World’s Fair of 1904 and relied on visitors’ experiences as early as 1996. This interpretation was part of a broader historiographical shift in the last decades of the twentieth century towards individuals, groups, and classes that had been left out of mainstream historical narratives. Martha Clevenger, <i>Indescribably Grand: Diaries and Letters from the 1904 World’s Fair</i> (St Louis: Missouri Historical Society, 1996).
 [^13]: “Secretary of War Lauds President’s Policy in Philippines,” <i>St. Louis Post-Dispatch</i>, April 30, 1904.
+[^20]: "Brilliant Opening of World's Fair," <i>St. Louis Post-Dispatch</i>, April 30, 1904.
+[^21]: Frederick Jackson Turner, <i>The Frontier in American History</i>, Originally published in 1920. Introduction by Andrew S. Trees (The Barnes & Noble Library of Essential Reading, 2009), 2.
+[^22]: Thomas Bender, <i>A Nation Among Nations: America's Place in World History</i> (New York: Hill and Wang, 2006), 220.
+[^23]: Thomas Bender, <i>A Nation Among Nations</i>, 220-222.
+[^24]: Frederick Jackson Turner, "The Problem of the West" in <i>The Frontier in American History</i>, Introduction by Andrew s. Trees, 143.
+[^25]: Thomas Bender, <i>A Nation Among Nations</i>, 206.
+[^26]: Thomas Bender, <i>A Nation Among Nations</i>, 209.
+[^27]: Office of The Historian, "The Spanish-American War, 1898". https://history.state.gov/milestones/1866-1898/spanish-american-war.
+[^28]: Office of The Historian, "The Philippine-American War, 1899-1902". https://history.state.gov/milestones/1899-1913/war.
+[^29]: Thomas Bender, <i>A Nation Among Nations</i>, 222.
+[^30]: Paul A. Kramer, <i>The Blood of The Government: Race, Empire, the United States, and the Philippines</i> (Chapel Hill: The University of North Carolina Press, 2006), 96-97.
+[^31]: Paul A. Kramer, <i>The Blood of The Government</i>, 100-101.
 [^14]: Charles G. Ross, <i>The story of the St. Louis Post-Dispatch</i> (St. Louis: Post-Dispatch?, 1949), 7.
 [^15]: Jim Allee Hart, <i>A history of the St Louis Globe-Democrat</i> (Missouri: University of Missouri Press, 1961), 184-185.
 [^16]: Cameron Blevins, “Space, Nation, and the Triumph of Region,” 128.
