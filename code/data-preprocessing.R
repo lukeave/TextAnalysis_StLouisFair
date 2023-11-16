@@ -8,7 +8,7 @@ library(ggmap)
 library(tidygeocoder)
 library(stringr)
 library(dplyr)
-getwd()
+
 #### Tesseract ####
 
 #establish tesseract language parameters
