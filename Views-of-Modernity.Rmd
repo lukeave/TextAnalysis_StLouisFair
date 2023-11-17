@@ -1,15 +1,17 @@
 ---
-title: "Views of Modernity in Space: Distant Reading the experience, perception, and representation of geopolitical entities in local newspapers during the St Louis 1904 World’s Fair"
-author: "Lucas Avelar"
+title: "Views of the Empire in Space: Geopolitical Entities and cultural representations at the St. Louis 1904 World’s Fair"
+author: "Lucas Avelar, Clemson University"
 date: "`r Sys.Date()`"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(wordVectors)
+library(magrittr)
 ```
 
-### 1.  Introduction 
+#### 1.  Introduction 
 
 <p> On the first day of December 1904, the last day of a carefully planned urban utopia brought together people from many different places and backgrounds to experience the world's fair for the last time.[^1] At least two-hundred-thousand people gathered on the grounds of the Louisiana Purchase Exhibition sharing mixed feelings of sadness, wonder, and nostalgia. Some visitors traveled a couple blocks to see the fair and its president David R. Francis for the last time. Others would soon be leaving the United States after seven months of transiting between cultural universes by walking. It was the so-called Francis Day: the grand spectacle of colors, shapes, tastes, and sounds was about to vanish from the city as if it never happened. </p>
 
@@ -33,7 +35,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <p> With a digitally driven argument, this article further contributes to scholarship on world’s fairs as symbolic universes in two ways: first, it demonstrates how methodologies of digital humanities like distant reading, word vector analysis, and named entity recognition can help historians assess how the fairs enabled particular cultural and discursive representations of the the hosting country and the world. Second, it pushes for a closer attention to the role of newspapers as one kind of audience to the fair’s ideological message: one that attends not only to the message, but to dialectical interactions and discursive negotiations between groups on the grounds. Newspapers further relied on the ways in which other audiences perceived and engaged with the language of empire and American colonialism at the fair in order to write their stories and produce complex discursive representations of participating cultures and the modernizing world.</p>
 
-### 2. "Open, ye gates," and let them "learn the lesson"
+#### 2. "Open, ye gates," and let them "learn the lesson"
 
 <p> In the morning of the last day of April 1904, immediately before David Francis made official the opening of the world’s fair, William Howard Taft, representing President Roosevelt, was trusted with the responsibility to give one final address to the thousands of people attending the ceremony. Taft said that the fair was “the union of nations in a progress toward higher material and spiritual existence.” But more than that, his speech emphasized that “the government of the Philippine Islands has felt justified in expending a very large sum of money to make the people who come here to commemorate the vindication of one great effort of American enterprise and expansion understand the conditions which surround the beginning of another.” During the McKinley administration, between July 1901 and December 1903, Taft had served as the Governor-General of the Philippines, the first civilian governor after a period of American military control over the islands. Serving as the Secretary of War by 1904, he contended that the centennial of the Louisiana Purchase marked “the beginning of the great Philippine problem.”[^13]</p>
 
@@ -65,7 +67,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-### 4. Extracting Place Names
+#### 4. Extracting Place Names
 
 Between the first and the last day of the fair, The St Louis Republic, the St. Louis Globe-Democrat, and the St. Louis Post-Dispatch were three of the most important local newspapers reporting about and from the world’s fair. These newspapers were representative of a class of cultural commentators that established narrative hegemony about American culture and politics in the city of St Louis throughout the latter half of the nineteenth century. By the turn of the century, the Post-Dispatch became a “thoroughly national newspaper” with broad interests in issues of national scale.[^14] The Globe-Democrat printed an average of five and one-half columns daily about the world’s fair between June 1901, when the organization of the exposition started, to December 1904, when it closed. Similarly, the Republic and the Post-Dispatch printed the equivalent of 1,012 and 988 pages respectively during the same period.[^15]</p>
 
@@ -85,11 +87,57 @@ Between the first and the last day of the fair, The St Louis Republic, the St. L
 
 [TO BE COMPLETED]
 
-### 5. Word Embbedings
+#### 5. Word Embbedings
+
+```{r, results='hide',fig.keep='all'}
+if (!file.exists("word_embbedings/fullcorpus_bngrams.txt")) prep_word2vec(origin="txt_files/",destination="word_embbedings/fullcorpus_bngrams.txt",lowercase=T,bundle_ngrams=2)
+
+if (!file.exists("word_embbedings/fullcorpus_bngrams.bin")) {model = train_word2vec("word_embbedings/fullcorpus_bngrams.txt","word_embbedings/fullcorpus_bngrams.bin",vectors=200,threads=4,window=30,iter=30,negative_samples=0)} else model = read.vectors("word_embbedings/fullcorpus_bngrams.bin")
+
+#visualize indian model
+indian = closest_to(model,model[[c("indian","native","tribe","muskogee","sioux","cocopah","indians")]],150)
+average_indian = model[[indian$word,average=F]]
+plot(average_indian,method="pca")
+```
+```{r}
+#visualize philippine model
+philippines = closest_to(model,model[[c("philippine","philippines","filipino","igorrote","manila","igorrot","filipinos")]],150)
+average_philippines = model[[philippines$word,average=F]]
+plot(average_philippines,method="pca")
+```
+```{r}
+#clustering across the full corpus (like topic modeling but less sophisticated)
+set.seed(10)
+centers = 150
+clustering = kmeans(model,centers=centers,iter.max = 40)
+
+sapply(sample(1:centers,10),function(n) {
+  names(clustering$cluster[clustering$cluster==n][1:10])
+})
+```
+
+```{r}
+#clustering based on 5 main topics
+topics = c("philippine","indian","sioux","cocopah", "igorrote")
+term_set = lapply(topics, 
+                  function(topic) {
+                    nearest_words = model %>% closest_to(model[[topic]],20)
+                    nearest_words$word
+                  }) %>% unlist
+
+subset = model[[term_set,average=F]]
+
+subset %>%
+  cosineDist(subset) %>% 
+  as.dist %>%
+  hclust %>%
+  plot
+```
+
 
 [TO BE COMPLETED]
 
-### 6. Conclusion
+#### 6. Conclusion
 
 [TO BE COMPLETED]
 
