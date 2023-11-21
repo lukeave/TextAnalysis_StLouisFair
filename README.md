@@ -1,4 +1,4 @@
-# Views of Modernity in Space: Distant Reading the experience, perception, and representation of placenames in local newspapers during the St Louis 1904 World’s Fair
+# Views of the Empire in Space: Geopolitical Entities and cultural representations at the St. Louis 1904 World’s Fair
 
 This is the repository for a digital history project that utilizes methodologies of distant reading and textual data mining to assess how local St Louis newspapers perceived and represented the visitors' multiple spatial experiences of the world's fair between April 1904 and December 1904. 
 
