@@ -14,15 +14,15 @@ In its root, the repository contains the final ``Imagined-Geography-of-Empire.ht
 - ``google_geodata.csv`` -> It contains the same variables as ``dataforgeocoding.csv`` with the addition of the geocoded "latitude" and "longitude" variables retrieved using Google's API key.
  - ``geocoded_placenames.csv`` -> It contains "rowid", "place_name", "count", "geo_address", "latitude", "longitude", and "scale". This is the final version of the geocoded placenames data frame and it allows for plotting subsets of the data based on scale (i.e., city, state, country, continent, geo_region, native_group).
  
- <h3>txt_files</h3>
+<h3>txt_files</h3>
  
  - This directory contains the original 461 text files resulting from the OCR process. This is the raw text data fed into RStudio for data prep and processing prior to the analysis.
  
- <h3>word_embedding</h3>
+<h3>word_embedding</h3>
  
  - This directory contains the ``fulltext_bngrams.txt`` and the ``fulltext_bngrams.bin`` files used to train and build up the word embedding model used in the ``word-vector-analysis.R`` script.
 
-<h4>code</h4>
+<h3>code</h3>
 
  - ``data-preprocessing.R`` --> This script prepares the original JPG files extracted from the online database <i>Newspapers.com</i> for text analysis. The JPG files were OCR'ed using ``tesseract`` and stored as plain text files in a separate directory named ``txt_files``. Using ``readtext``, the text files were used to generate a data frame containing the document ID and the complete text of each file in each row. This dataframe was then joined with the ``metadata.csv`` table, resulting in a raw version of the data (prior to cleaning and stopwords removal) stored as ``raw_data.csv``. After cleaning and removing punctuation, special characters, and upper-case letters, as well as addressing some problems of OCR errors, the data was stored as ``text_data.csv``. Note that during this step, stopwords are <b>NOT</b> removed yet. Lastly, the script tokenizes the data using ``tidytext`` for data exploratory analysis (EDA). The tokenization process includes removing stop words using a customized stop list. The output was stored as ``tokenized_data.csv``, which was then used in the following step (EDA).
  
