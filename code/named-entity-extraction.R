@@ -12,6 +12,7 @@ library(tidyr)
 #### Named Entity Extraction ####
 
 #parse the text from the text data
+text.data <- read.csv("data/text_data.csv")
 parsedtxt <- spacy_parse(text.data, lemma = FALSE, additional_attributes = c("ent_iob_"))
 
 parsedtxt <- parsedtxt %>% 

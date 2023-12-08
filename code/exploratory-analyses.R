@@ -18,6 +18,7 @@ months.numeric <- c(4, 5, 6, 7, 8, 9, 10, 11, 12)
 months.character <- c("April", "May", "June", "July", "August", "September", "October", "November", "December")
 
 ### plot term frequency of terms "savage" and "native" ###
+token.data <- read.csv("data/tokenized_data.csv")
 token.data %>%
   filter(word %in% c("savage", "native")) %>%
   group_by(month, word) %>% 
