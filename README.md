@@ -12,7 +12,7 @@ In its root, the repository contains the final ``Imagined-Geography-of-Empire.ht
 - ``tokenized_data.csv`` -> It contains the same variables as ``text_data.csv``, except the "text" column is replaced by the "word" column after tokenization. This data frame does not contain stop words.
 - ``dataforgeocoding.csv`` -> It contains the widen data frame with placenames extracted from ``text_data.csv`` using ``spacy_parse{spacyR}``. The widen frame includes the "place_name" and "count" columns, as well as "city", "state", "country", "native_group", and "continent" as variables, which were merged into a "geo_address" column. This new variable was then used for geocoding.
 - ``google_geodata.csv`` -> It contains the same variables as ``dataforgeocoding.csv`` with the addition of the geocoded "latitude" and "longitude" variables retrieved using Google's API key.
- - ``geocoded_placenames.csv`` -> It contains "rowid", "place_name", "count", "geo_address", "latitide", "longitude", and "scale". This is the final version of the geocoded placenames data frame and it allows for plotting subsets of the data based on scale (i.e., city, state, country, continent, geo_rgion, native_group).
+ - ``geocoded_placenames.csv`` -> It contains "rowid", "place_name", "count", "geo_address", "latitude", "longitude", and "scale". This is the final version of the geocoded placenames data frame and it allows for plotting subsets of the data based on scale (i.e., city, state, country, continent, geo_region, native_group).
  
  <h4>txt_files</h4>
  
