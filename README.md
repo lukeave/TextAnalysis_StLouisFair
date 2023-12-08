@@ -6,7 +6,7 @@ In its root, the repository contains the final ``Imagined-Geography-of-Empire.ht
 
 <h4>data</h4>
 
-- ``metadata.csv`` -> It contains the metadata for each newspaper article collected from <i>Newspapers.com<i>. Variables include: "doc_id", "file_format", "first_page_indicator", "title", "day", "month", "year", "newspaper_id", "article_date", "multipage_article", "page_id", "multipage_id", and "article_id".
+- ``metadata.csv`` -> It contains the metadata for each newspaper article collected from <i>Newspapers.com</i>. Variables include: "doc_id", "file_format", "first_page_indicator", "title", "day", "month", "year", "newspaper_id", "article_date", "multipage_article", "page_id", "multipage_id", and "article_id".
 - ``raw_data.csv`` -> It contains the same variables as ``metadata.csv``, but with an added variable containing the full OCR'ed text of each JPG file. This text is not clean and it still contains stop words.
 - ``text_data.csv`` -> It contains the same variables as ``raw_data.csv``, but the "text"" column is clean. It still contains stop words.
 - ``tokenized_data.csv`` -> It contains the same variables as ``text_data.csv``, except the "text" column is replaced by the "word" column after tokenization. This data frame does not contain stop words.
