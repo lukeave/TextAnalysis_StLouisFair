@@ -4,7 +4,7 @@ This digital history project utilizes methodologies of distant reading and textu
 
 In its root, the repository contains the final ``Imagined-Geography-of-Empire.html`` (with its accompanying .Rmd version), the ``README.md`` file, and the R project file. The repository contains four sub-directories: "data", "txt_files", "word_embedding", and "code".
 
-<h4>data</h4>
+<h3>data</h3>
 
 - ``metadata.csv`` -> It contains the metadata for each newspaper article collected from <i>Newspapers.com</i>. Variables include: "doc_id", "file_format", "first_page_indicator", "title", "day", "month", "year", "newspaper_id", "article_date", "multipage_article", "page_id", "multipage_id", and "article_id".
 - ``raw_data.csv`` -> It contains the same variables as ``metadata.csv``, but with an added variable containing the full OCR'ed text of each JPG file. This text is not clean and it still contains stop words.
@@ -14,11 +14,11 @@ In its root, the repository contains the final ``Imagined-Geography-of-Empire.ht
 - ``google_geodata.csv`` -> It contains the same variables as ``dataforgeocoding.csv`` with the addition of the geocoded "latitude" and "longitude" variables retrieved using Google's API key.
  - ``geocoded_placenames.csv`` -> It contains "rowid", "place_name", "count", "geo_address", "latitude", "longitude", and "scale". This is the final version of the geocoded placenames data frame and it allows for plotting subsets of the data based on scale (i.e., city, state, country, continent, geo_region, native_group).
  
- <h4>txt_files</h4>
+ <h3>txt_files</h3>
  
  - This directory contains the original 461 text files resulting from the OCR process. This is the raw text data fed into RStudio for data prep and processing prior to the analysis.
  
- <h4>word_embedding</h4>
+ <h3>word_embedding</h3>
  
  - This directory contains the ``fulltext_bngrams.txt`` and the ``fulltext_bngrams.bin`` files used to train and build up the word embedding model used in the ``word-vector-analysis.R`` script.
 
@@ -30,6 +30,6 @@ In its root, the repository contains the final ``Imagined-Geography-of-Empire.ht
  
  - ``named-entity-extraction.R`` --> This script applies the ``spacy_parse{spacyR}`` function on the ``text_data.csv`` to extract geopolitical entities from the corpus through tokenization. When applicable, the function assigns each token a particular type of entity classification. The two classifications that mattered for the sake of this project were "NORP" (Nationalities or religious or political groups) and "GPE" (Countries, cities, states). Note that this step required close reading to understand the limitations of the automated entity recognition, and manual interventions to the algorithm in order to retrieve important locations and placenames that were not automatically recognized. It also accounts for OCR errors that made some placenames unrecognizable by the algorithm, although the author recognizes that many OCR errors persisted and that a cleaner version of the text data could present variations in the analytic results. A significant portion of this script is devoted to annotating, data cleaning, and mitigating issues of OCR errors. The last part of the script prepares the data frame with extracted entities for geocoding. Three versions of the data are stored in this step: 1) ``dataforgeocoding.csv`` stores the data frame with placenames and a full-address column that can be used for geocoding; 2) ``google_geodata.csv`` stores the output of the automated geocoding process using Google's API key; 3) ``geocoded_placenames.csv`` stores the final version of the data after removing temporary variables and including the "scale" variable (city, state, country, etc) that allows for plotting subsets of the data based on scale.
  
- - ``word-vector-analysis.R`` --> This script relies on @bmschmidt's package ``wordVectors`` and his example on historical cookbooks for exploring word embedding models in historical analysis. The script creates a ``fullcorpus_bngrams.txt`` file and stores it in a separate directory named ``word_embedding``. It then uses a temporary ``.bin`` file to train a model on the full corpus file. After exploring the words that are closest semantically to the words "progress" and "savage", it plots the terms on two dimensional visualizations based on their semantic similarity scores. Lastly, the script creates a cluster of words across the entire corpus in a way that mimics topic modeling to some extent and looks for patterns in the 10 first clusters. It then creates a subset cluster based on the terms "progress" and "savage" only, plotting the output on a dendrogram.
+ - ``word-vector-analysis.R`` --> This script relies on @bmschmidt 's package ``wordVectors`` and his example on historical cookbooks for exploring word embedding models in historical analysis. The script creates a ``fullcorpus_bngrams.txt`` file and stores it in a separate directory named ``word_embedding``. It then uses a temporary ``.bin`` file to train a model on the full corpus file. After exploring the words that are closest semantically to the words "progress" and "savage", it plots the terms on two dimensional visualizations based on their semantic similarity scores. Lastly, the script creates a cluster of words across the entire corpus in a way that mimics topic modeling to some extent and looks for patterns in the 10 first clusters. It then creates a subset cluster based on the terms "progress" and "savage" only, plotting the output on a dendrogram.
 
 The project is currently a work in progress for the HIST8550 Seminar in Digital History at Clemson University under supervision of Dr. Amanda Regan.
