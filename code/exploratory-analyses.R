@@ -38,7 +38,7 @@ token.data %>%
   ggtitle("Frequency of terms 'savage' and 'native' in newspaper articles across the months")
 
 
-### frequency positive and negative terms used in the articles ###
+### frequency of positive and negative terms used in the articles ###
 #this is based on sentiment analysis methodologies, which is highly problematic for historical analysis. it is used here cautiously and merely as an added form of exploring the data to inspire new questions.
 
 #get positive-negative terms dataset
