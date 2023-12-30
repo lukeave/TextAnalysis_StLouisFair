@@ -443,7 +443,7 @@ register_google(key = Sys.getenv("GOOGLEGEOCODE_API_KEY"))
 
 geocoded.data <- geocode(wide.placenames, address = geo_address, method='google', lat = latitude, long = longitude)
 #store geocoded data in a csv file
-write.csv(geocoded.data, "google_geodata.csv")
+write.csv(geocoded.data, "data/google_geodata.csv")
 rm(wide.placenames)
 
 #final cleaning up
@@ -454,4 +454,4 @@ geocoded.data <- geocoded.data %>%
 geocoded.data <- left_join(geocoded.data, placenames) %>% 
   select(rowid, place_name, count, geo_address, scale, latitude, longitude)
 #store geocoded_placenames.csv
-write.csv(geocoded.data, "geocoded_placenames.csv")
+write.csv(geocoded.data, "data/geocoded_placenames.csv")
