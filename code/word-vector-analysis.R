@@ -15,9 +15,9 @@ library(ggplot2)
 #### Building the Model ####
 
 
-if (!file.exists("word_embeddings/fullcorpus_bngrams.txt")) prep_word2vec(origin="txt_files/",destination="word_embeddings/fullcorpus_bngrams.txt",lowercase=T,bundle_ngrams=2)
+if (!file.exists("word_embedding/fullcorpus_bngrams.txt")) prep_word2vec(origin="txt_files/",destination="word_embedding/fullcorpus_bngrams.txt",lowercase=T,bundle_ngrams=2)
 
-if (!file.exists("word_embeddings/fullcorpus_bngrams.bin")) {model = train_word2vec("word_embeddings/fullcorpus_bngrams.txt","word_embeddings/fullcorpus_bngrams.bin",vectors=50,threads=4,window=30,iter=30,negative_samples=0)} else model = read.vectors("word_embeddings/fullcorpus_bngrams.bin")
+if (!file.exists("word_embedding/fullcorpus_bngrams.bin")) {model = train_word2vec("word_embedding/fullcorpus_bngrams.txt","word_embedding/fullcorpus_bngrams.bin",vectors=50,threads=4,window=30,iter=30,negative_samples=0)} else model = read.vectors("word_embedding/fullcorpus_bngrams.bin")
 
 model <- model[-1,] #remove "</s>" (first row) from the model as it seems to be an OCR error
 

@@ -1,7 +1,7 @@
 "","rowid","place_name","count","geo_address","scale","latitude","longitude"
 "1",1,"United States",287,"Washington DC, USA","country",38.9071923,-77.0368707
 "2",2,"Philippines",253,"Metro Manila, Philippines","country",14.6090537,121.0222565
-"3",3,"New York",120,"New York, New York, USA","city",40.7127753,-74.0059728
+"3",3,"New York",119,"New York, New York, USA","city",40.7127753,-74.0059728
 "4",4,"Missouri",105,"Jefferson City, Missouri, USA","state",38.5767017,-92.1735164
 "5",5,"Germany",76,"Berlin, Germany","country",52.5200066,13.404954
 "6",6,"Washington DC",72,"Washington DC, USA","city",38.9071923,-77.0368707
@@ -26,9 +26,9 @@
 "25",25,"Cocopah",18,"Cocopah Reservation","native_group",32.6213992,-114.7647516
 "26",26,"Indiana",18,"Indianapolis, Indiana, USA","state",39.768403,-86.158068
 "27",27,"New Orleans",18,"New Orleans, Louisiana, USA","city",29.9510658,-90.0715323
-"28",28,"Austria-Hungary",15,"Vienna, Austria","country",48.2081743,16.3738189
+"28",28,"Austria-Hungary",15,"Vienna, Austria","country",48.2081664,16.3718643
 "29",29,"Netherlands",15,"The Hague, Netherlands","country",52.0704978,4.3006999
-"30",30,"Toronto",15,"Toronto, Canada","city",43.653226,-79.3831843
+"30",30,"Toronto",15,"Toronto","city",43.653226,-79.3831843
 "31",31,"Alaska",14,"Juneau, Alaska, USA","state",58.3004933,-134.4201306
 "32",32,"Belgium",14,"Brussels, Belgium","country",50.8476424,4.3571696
 "33",33,"Illinois",14,"Springfield, Illinois, USA","state",39.7817213,-89.6501481
@@ -82,7 +82,7 @@
 "81",81,"Oregon",3,"Salem, Oregon, USA","state",44.9428975,-123.0350963
 "82",82,"Pima-Maricopa",3,"Salt River Pima-Maricopa Indian Community","native_group",33.516711,-111.7673622
 "83",83,"Sacramento",3,"Sacramento, California, USA","city",38.5815719,-121.4943996
-"84",84,"Vienna",3,"Vienna, Austria","city",48.2081743,16.3738189
+"84",84,"Vienna",3,"Vienna, Austria","city",48.2081664,16.3718643
 "85",85,"Alton",2,"Alton, Illinois, USA","city",38.8906038,-90.1842764
 "86",86,"Argentina",2,"Buenos Aires, Argentina","country",-34.6036844,-58.3815591
 "87",87,"Baltimore",2,"Baltimore, Maryland, USA","city",39.2903848,-76.6121893

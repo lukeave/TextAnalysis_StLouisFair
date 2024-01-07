@@ -52,38 +52,38 @@ entities <- entities %>%
 
 #catch accurate place references for all occurrences of the token "new"
 entities <- entities %>% 
-  mutate(annotation = ifelse(rowid %in% c(557, 13634, 24222, 26437, 26979, 28023, 28102, 28428, 28952, 30053, 31619, 34302, 47318, 47345, 48359, 48805, 49207, 53245, 61837, 64180, 67350, 79796, 85018, 85257, 86856, 86876, 93792, 93810, 95595, 98671, 105491, 108190, 108231, 108258, 108291, 108305, 110895, 110910, 111255, 114148, 122845, 132476, 144678, 158226, 163239, 163417, 163539, 177183, 178592, 195508, 202407, 206914, 207040, 207075, 207262, 207290, 207306), "NY", #New York
-                        ifelse(rowid %in% c(30059, 48265, 49823, 50725, 82773, 157388, 158330, 172295, 176918), "NOLA", #New Orleans
-                               ifelse(rowid %in% c(33021, 33046, 33081, 48382, 82845, 167455), "NJ", #New Jersey
-                                      ifelse(rowid %in% c(78818, 85243), "NH", #New Hampshire
-                                             ifelse(rowid == 84193, "NM", #New Mexico
+  mutate(annotation = ifelse(rowid %in% c(557, 13634, 24191, 26406, 26948, 27992, 28071, 28397, 28952, 30022, 31588, 34271, 47287, 47314, 48328, 48774, 49176, 53214, 61806, 64149, 67319, 79765, 84987, 85226, 86825, 86845, 93761, 93779, 95564, 98640, 105460, 108159, 108200, 108227, 108260, 108274, 110864, 110879, 111224, 114117, 122814, 132445, 144647, 158195, 163208, 163386, 163508, 177152, 178561, 195477, 202376, 206883, 207009, 207044, 207231, 207259, 207275), "NY", #New York
+                        ifelse(rowid %in% c(30028, 48234, 49792, 50694, 82742, 157357, 158299, 172264, 176887), "NOLA", #New Orleans
+                               ifelse(rowid %in% c(32990, 33015, 33050, 48351, 82814, 167424), "NJ", #New Jersey
+                                      ifelse(rowid %in% c(78787, 85212), "NH", #New Hampshire
+                                             ifelse(rowid == 84162, "NM", #New Mexico
                                                     annotation))))))
 
 #catch accurate place references for all occurrences of the token "mexico"
 entities <- entities %>% 
-  mutate(annotation = ifelse(rowid %in% c(24110, 48833, 49138, 51518, 51535, 51552, 74321, 84194, 111123, 119511, 139826, 176480, 176502, 181724, 182612, 192746, 192968, 193000, 193534), "MEX", #Mexico
-                             ifelse(rowid %in% c(2479, 34621), "CCP", #Cocopah
-                                    ifelse(rowid %in% c(50680, 50933), "GM", #Gulf of Mexico
+  mutate(annotation = ifelse(rowid %in% c(24079, 48802, 49107, 51487, 51504, 51521, 74290, 84163, 111092, 119480, 139795, 176449, 176471, 181693, 182581, 192715, 192937, 192969, 193503), "MEX", #Mexico
+                             ifelse(rowid %in% c(2479, 34590), "CCP", #Cocopah
+                                    ifelse(rowid %in% c(50649, 50902), "GM", #Gulf of Mexico
                                            annotation))))
 
 # catch accurate place references for all occurrences of South, Central, and Latin America
 ## collapse occurrences into one ("Latin America") since historically these have been used interchangeably.
 ### there is no reference to North America in the corpus
 entities <- entities %>% 
-  mutate(annotation = ifelse(rowid %in% c(50638, 51817, 120834, 158114, 72540, 120834, 177041, 74151, 74317, 165817), "LatAm", #Latin America -- collapsing Latin, Central and South America into one since historically these have been used interchangeably.
+  mutate(annotation = ifelse(rowid %in% c(50607, 51786, 120803, 158083, 72509, 177010, 74286, 74120, 165786), "LatAm", #Latin America -- collapsing Latin, Central and South America into one since historically these have been used interchangeably.
                              annotation))
 
 #catch accurate place references for all occurrences of the token "india*"
 entities <- entities %>% 
-  mutate(annotation = ifelse(rowid %in% c(2493, 2517, 2665, 10491, 13453, 15079, 15093, 26254, 28119, 28172, 28291, 28309, 28321, 31123, 36973, 39803, 50324, 61166, 66165, 69596, 69628, 69893, 111527, 111556, 111565, 111608, 113060, 115177, 123943, 123952, 124042, 124063, 124071, 124102, 124259, 130019, 145828, 145897, 145914,147155, 147255, 147270, 147290, 147362, 147438, 147945, 148055, 148065, 148099, 148201, 148245, 148333, 165063, 165126, 167692, 171586, 171625, 171637, 171653, 171754, 171776, 171924, 172079, 172107, 172134, 174504, 174516, 176777, 176797, 177816, 177839, 177862, 177990, 178150, 178207, 179638, 191066, 191106, 191130, 191133, 191181, 194610, 194652, 203211, 203232, 203342), "NTV", #General meaning of Native
+  mutate(annotation = ifelse(rowid %in% c(2464, 2517, 2665, 10491, 13453, 15079, 15093, 26223, 28088, 28141, 28260, 28278, 28290, 31092, 36942, 39772, 50293, 61135, 66134, 69565, 69597, 69862, 111496, 111525, 111534, 111577, 113029, 115146, 123912, 123921, 124011, 124032, 124040, 124071, 124228, 129988, 145797, 145866, 145883,147124, 147224, 147239, 147259, 147331, 147407, 147914, 148024, 148034, 148068, 148170, 148214, 148302, 165032, 165095, 167661, 171555, 171594, 171606, 171622, 171723, 171745, 171893, 172048, 172076, 172103, 174473, 174485, 176746, 176766, 177785, 177808, 177831, 177959, 178119, 178176, 179607, 191035, 191075, 191099, 191102, 191150, 194579, 194621, 203180, 203201, 203311), "NTV", #General meaning of Native
                              ifelse(rowid %in% c(10453, 10476, 10540), "AZ", #Pima, Americopa, and Papago
-                                    ifelse(rowid %in% c(2464, 177292, 177315, 177377, 186865), "CCP", #Cocopah
-                                           ifelse(rowid %in% c(34629, 169806), "KWK", #Kwakiutl
-                                                  ifelse(rowid %in% c(17049, 84677), "MQ", #Moqui
-                                                         ifelse(rowid %in% c(2698, 48392), "SX",#Sioux
-                                                               ifelse(rowid %in% c(18085, 51505, 71607, 104051, 130236, 130736, 131699, 166770, 166884, 178598, 179657, 180198, 180210, 186535, 186566, 197763, 197895, 201477), "IN", #Indiana
-                                                                      ifelse(rowid %in% c(147343), "PB", #Pueblo
-                                                                             ifelse(rowid %in% c(164048), "IMD", #India
+                                    ifelse(rowid %in% c(2493, 177261, 177284, 177346, 186834), "CCP", #Cocopah
+                                           ifelse(rowid %in% c(34598, 169775), "KWK", #Kwakiutl
+                                                  ifelse(rowid %in% c(17049, 84646), "MQ", #Moqui
+                                                         ifelse(rowid %in% c(2698, 48361), "SX",#Sioux
+                                                               ifelse(rowid %in% c(18054, 51474, 71576, 104020, 130205, 130705, 131668, 166739, 166853, 178567, 179626, 180167, 180179, 186504, 186535, 197732, 197864, 201446), "IN", #Indiana
+                                                                      ifelse(rowid %in% c(147312), "PB", #Pueblo
+                                                                             ifelse(rowid %in% c(164017), "IMD", #India
                                                                   annotation))))))))))
 
 
@@ -112,7 +112,7 @@ entities <- entities %>%
 
 #remove rows with token "india*" that should not be counted as entities
 entities <- entities %>% 
-  filter(!rowid == 55903) # "indian summer"
+  filter(!rowid == 55872) # "indian summer"
 
 # second count -- this time, without grouping by entity type
 entities.count <- entities %>%
@@ -123,7 +123,7 @@ entities.count <- entities %>%
 ## must count again after this step is complete
 
 entities <- entities %>% 
-  mutate(place_name = fct_collapse(token, "United States" = c("united", "american", "americans", "america", "americanized", "americas", "ameri"),
+  mutate(place_name = fct_collapse(token, "United States" = c("united", "american", "americans", "america", "americas", "ameri", "americanization"),
                                    "Latin America" = "latin_america",
                                    "Alaska" = c("alaska", "alaskan"),
                                    "Russia" = c("russia", "russian"),

@@ -1,7 +1,7 @@
 "","place_name","count","city","state","country","native_group","continent","geo_region","geo_address","latitude","longitude"
 "1","United States",287,"Washington DC",NA,"USA",NA,NA,NA,"Washington DC, USA",38.9071923,-77.0368707
 "2","Philippines",253,"Metro Manila",NA,"Philippines",NA,NA,NA,"Metro Manila, Philippines",14.6090537,121.0222565
-"3","New York",120,"New York","New York","USA",NA,NA,NA,"New York, New York, USA",40.7127753,-74.0059728
+"3","New York",119,"New York","New York","USA",NA,NA,NA,"New York, New York, USA",40.7127753,-74.0059728
 "4","Missouri",105,"Jefferson City","Missouri","USA",NA,NA,NA,"Jefferson City, Missouri, USA",38.5767017,-92.1735164
 "5","Germany",76,"Berlin",NA,"Germany",NA,NA,NA,"Berlin, Germany",52.5200066,13.404954
 "6","Washington DC",72,"Washington DC",NA,"USA",NA,NA,NA,"Washington DC, USA",38.9071923,-77.0368707
@@ -26,9 +26,9 @@
 "25","Cocopah",18,NA,NA,NA,"Cocopah Reservation",NA,NA,"Cocopah Reservation",32.6213992,-114.7647516
 "26","Indiana",18,"Indianapolis","Indiana","USA",NA,NA,NA,"Indianapolis, Indiana, USA",39.768403,-86.158068
 "27","New Orleans",18,"New Orleans","Louisiana","USA",NA,NA,NA,"New Orleans, Louisiana, USA",29.9510658,-90.0715323
-"28","Austria-Hungary",15,"Vienna",NA,"Austria",NA,NA,NA,"Vienna, Austria",48.2081743,16.3738189
+"28","Austria-Hungary",15,"Vienna",NA,"Austria",NA,NA,NA,"Vienna, Austria",48.2081664,16.3718643
 "29","Netherlands",15,"The Hague",NA,"Netherlands",NA,NA,NA,"The Hague, Netherlands",52.0704978,4.3006999
-"30","Toronto",15,"Toronto",NA,"Canada",NA,NA,NA,"Toronto, Canada",43.653226,-79.3831843
+"30","Toronto",15,"Toronto",NA,NA,NA,NA,NA,"Toronto",43.653226,-79.3831843
 "31","Alaska",14,"Juneau","Alaska","USA",NA,NA,NA,"Juneau, Alaska, USA",58.3004933,-134.4201306
 "32","Belgium",14,"Brussels",NA,"Belgium",NA,NA,NA,"Brussels, Belgium",50.8476424,4.3571696
 "33","Illinois",14,"Springfield","Illinois","USA",NA,NA,NA,"Springfield, Illinois, USA",39.7817213,-89.6501481
@@ -82,7 +82,7 @@
 "81","Oregon",3,"Salem","Oregon","USA",NA,NA,NA,"Salem, Oregon, USA",44.9428975,-123.0350963
 "82","Pima-Maricopa",3,NA,NA,NA,"Salt River Pima-Maricopa Indian Community",NA,NA,"Salt River Pima-Maricopa Indian Community",33.516711,-111.7673622
 "83","Sacramento",3,"Sacramento","California","USA",NA,NA,NA,"Sacramento, California, USA",38.5815719,-121.4943996
-"84","Vienna",3,"Vienna",NA,"Austria",NA,NA,NA,"Vienna, Austria",48.2081743,16.3738189
+"84","Vienna",3,"Vienna",NA,"Austria",NA,NA,NA,"Vienna, Austria",48.2081664,16.3718643
 "85","Alton",2,"Alton","Illinois","USA",NA,NA,NA,"Alton, Illinois, USA",38.8906038,-90.1842764
 "86","Argentina",2,"Buenos Aires",NA,"Argentina",NA,NA,NA,"Buenos Aires, Argentina",-34.6036844,-58.3815591
 "87","Baltimore",2,"Baltimore","Maryland","USA",NA,NA,NA,"Baltimore, Maryland, USA",39.2903848,-76.6121893
