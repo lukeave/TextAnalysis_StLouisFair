@@ -52,8 +52,8 @@ for (i in 1:length(jpgs)) {
   #confidence_result <- tesseract::ocr_data(fullpath) # get confidence levels
   print(filename) # show me which file is being processed
   write_file(result, file = paste0(newdir, filename, ".txt")) # write output out as txt file in new txt_files directory
-  #write_csv(confidence_result, file = paste0(confdir, filename, "_confidence.csv"))  # write csv file for confidence level and bounding box of words
-} # Decided not to use tesseract's default confidence levels as they were misleading without model training.
+  write_csv(confidence_result, file = paste0(confdir, filename, "_confidence.csv"))  # write csv file for confidence level and bounding box of words
+} # # This has proven to be inefficient. Tesseract's confidence levels do not mean anything if the model is not trained on accurate data first.
 
 # remove OCR loop variables
 rm(i)
@@ -63,16 +63,7 @@ rm(confdir)
 rm(path)
 rm(confidence_result)
 rm(result)
-
-# make table with all confidence levels and bbox parameters provided by Tesseract
-setwd("new data/confidence/") # change working directory temporarily
-files <- list.files(pattern = "*.csv") # list all csv files as a list
-confidence_data <- files %>% 
-  lapply(read.csv) %>% # apply read.csv() to each element on the list
-  bind_rows() # combine all tables in a single df
-setwd("../../../Lovett_Avelar_OCR/") # reset working directory to project directory
-
-# This has proven to be inefficient. Tesseract's confidence levels do not mean anything if the model is not trained on accurate data first.
+rm(english)
 
 # function to correct words split across lines in text file
 update_text <- function(text) {
@@ -83,16 +74,17 @@ update_text <- function(text) {
 }
 
 # build a validation text file set to be corrected manually
-setwd("txt_files-Validated")
-val.files <- list.files(pattern = "*.txt")
+val.files <- list.files(path = "txt_files-Validated", pattern = "*.txt")
 
 # initial pass to correct words split across lines then write back to original file in txt_files-Validation directory
+
 for (i in 1:length(val.files)) {
   filename <- paste(val.files[i]) # catch the file's name
-  text <- readtext(filename) #read in file content
+  fullpath <- paste0("txt_files-Validated/", filename)
+  text <- readtext(fullpath) #read in file content
   updated_text <- update_text(text) # pass function to correct split words
   print(filename) # show me which file is being processed
-  write_file(updated_text, file = filename) # write output out as txt file in new txt_files directory
+  write_file(updated_text, file = fullpath) # write output out as txt file in new txt_files directory
   
 } 
 
