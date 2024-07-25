@@ -56,14 +56,7 @@ for (i in 1:length(jpgs)) {
 } # # This has proven to be inefficient. Tesseract's confidence levels do not mean anything if the model is not trained on accurate data first.
 
 # remove OCR loop variables
-rm(i)
-rm(newdir)
-rm(jpgs)
-rm(confdir)
-rm(path)
-rm(confidence_result)
-rm(result)
-rm(english)
+rm(i, newdir, jpgs, confdir, path, confidence_result, result, english, filename, fullpath)
 
 # function to correct words split across lines in text file
 update_text <- function(text) {
@@ -85,8 +78,8 @@ for (i in 1:length(val.files)) {
   updated_text <- update_text(text) # pass function to correct split words
   print(filename) # show me which file is being processed
   write_file(updated_text, file = fullpath) # write output out as txt file in new txt_files directory
-  
 } 
+rm(val.files, filename, fullpath, text, updated_text)
 
 #### Build Data Frames ####
 
@@ -94,12 +87,12 @@ for (i in 1:length(val.files)) {
 txt.files <- readtext(file.path("txt_files-Validated/"))
 txt.files <- txt.files %>% 
   arrange(doc_id)
-txt.files <- data.frame(gsub("\\.jpg\\.txt", ".txt", txt.files$doc_id),txt.files$text)
+#txt.files <- data.frame(gsub("\\.jpg\\.txt", ".txt", txt.files$doc_id),txt.files$text)
 
 # fix txt.files column names (not sure why they are being modified in the first place)
-txt.files <- txt.files %>%
-  rename(doc_id = gsub.....jpg...txt.....txt...txt.files.doc_id.) %>%
-  rename(text = txt.files.text)
+#txt.files <- txt.files %>%
+  #rename(doc_id = gsub.....jpg...txt.....txt...txt.files.doc_id.) %>%
+  #rename(text = txt.files.text)
 
 # read in metadata associated with each file
 metadata <- read.csv("data/metadata.csv")
@@ -123,9 +116,6 @@ text.data$text <- raw.data$text %>%
   str_remove_all("~") %>% 
   str_remove_all("|") %>% 
   str_replace_all("[^[:alnum:]]", " ")
-
-# store text data
-write.csv(text.data, file = "data/text_data.csv")
 
 # create first iteration of the tokenized data
 token.data <- text.data %>%
@@ -156,7 +146,7 @@ word.count <- token.data %>%
 
 # remove more irrelevant words
 other.stop.words <- c("day", "building", "company", "miss","yesterday","exhibits")
-#other.stop.words <- c("fe", "tions", "ey", "ap", "ea", "ee", "day", "building", "company", "ae", "miss", "oe", "yesterday", "ing", "se", "es", "de", "te", "eee", "tion", "en", "er", "ss", "ts", "lols", "exhibits", "con", "al", "tn", "pe", "ne", "ad", "ed", "ar", "ef", "gov", "im", "ge", "os", "eae", "ay", "ot", "aa", "dis", "mo", "tt", "dr", "pa", "ly", "ag", "fs") - Decided to keep these errors in order to try and manually catch actual words using the data validation method through dictionaries below.
+#other.stop.words <- c("fe", "tions", "ey", "ap", "ea", "ee", "day", "building", "company", "ae", "miss", "oe", "yesterday", "ing", "se", "es", "de", "te", "eee", "tion", "en", "er", "ss", "ts", "lols", "exhibits", "con", "al", "tn", "pe", "ne", "ad", "ed", "ar", "ef", "gov", "im", "ge", "os", "eae", "ay", "ot", "aa", "dis", "mo", "tt", "dr", "pa", "ly", "ag", "fs") -- Decided to keep these errors in order to try and manually catch actual words using the data validation method through dictionaries below.
 other.stop.words <- other.stop.words %>% 
   as.data.frame()
 colnames(other.stop.words)[1] <- "word"
@@ -171,6 +161,11 @@ token.data <- token.data %>%
 word.count <- token.data %>%
   count(word, sort = TRUE) %>% 
   as.data.frame()
+
+# write out data frames
+write.csv(raw.data, "data/raw_data.csv")
+write.csv(text.data, "data/text_data.csv")
+write.csv(token.data, "data/tokenized_data.csv")
 
 #### Data Validation ####
 
@@ -211,7 +206,8 @@ move_file_if_large <- function(file_path) {
 }
 
 # get word count per each file
-file_word_count <- token.data %>%
+file_word_count <- raw.data %>% 
+  unnest_tokens(word, text) %>% 
   count(doc_id, sort = TRUE) %>% 
   as.data.frame()
 
@@ -221,16 +217,16 @@ file_word_count <- file_word_count %>%
 head(file_word_count)
 
 # loop and sort JPG files
-## make sure doc_id in word.count has the same file name of JPG files (no ".txt")
+## make sure doc_id in file_word_count has the same file name of JPG files (no ".txt")
 for (i in 1:nrow(file_word_count)) {
   if (file_word_count$n[i] >= min_large) {
-    move_file_if_large(paste0("Newspaper_articles/", file_word_count$doc_id[i])) # move large ones first
+    move_file_if_large(paste0("Newspaper_articles/", file_word_count$doc_id[i], ".jpg")) # move large ones first
   }
   else if (file_word_count$n[i] >= min_medium) {
-    move_file_if_medium(paste0("Newspaper_articles/", file_word_count$doc_id[i])) # move medium ones
+    move_file_if_medium(paste0("Newspaper_articles/", file_word_count$doc_id[i], ".jpg")) # move medium ones
   }
   else if (file_word_count$n[i] >= min_small) {
-    move_file_if_small(paste0("Newspaper_articles/", file_word_count$doc_id[i])) # move small ones
+    move_file_if_small(paste0("Newspaper_articles/", file_word_count$doc_id[i], ".jpg")) # move small ones
   }
 }
 
